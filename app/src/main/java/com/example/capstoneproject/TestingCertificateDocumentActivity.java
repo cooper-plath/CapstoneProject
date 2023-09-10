@@ -9,8 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -21,22 +25,24 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.Calendar;
 
 public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
-    private Button chooseDateButton;
+    private Button chooseDateButton1, chooseDateButton2;
 
     ActivityResultLauncher<Intent> signatureActivityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult activityResult) {
                     int result = activityResult.getResultCode();
-                    Intent data = activityResult.getData();
-
                     if (result == RESULT_OK) {
-                        String testString = data.getStringExtra("testString");
-                        Log.d("TestString", "TestString*****" + testString);
+                        Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
+                        if (signatureBitmap != null) {
+                            signatureImageView.setVisibility(View.VISIBLE);
+
+                        }
                     }
                 }
             });
@@ -49,43 +55,51 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testing_certificate_document);
-        initDateButton();
-        chooseDateButton = findViewById(R.id.chooseDateBtn);
-        regulationInformationTextView = findViewById(R.id.regulationInformationTextView);
-        signatureImageView = findViewById(R.id.signatureImageView);
 
+        chooseDateButton1 = findViewById(R.id.chooseDateBtn1);
+        chooseDateButton2 = findViewById(R.id.chooseDateBtn2);
+        regulationInformationTextView = findViewById(R.id.regulationInformationTextView);
+
+        initDateButton(chooseDateButton1);
+        initDateButton(chooseDateButton2);
+
+
+        signatureImageView = findViewById(R.id.signatureImageView);
         setRegulationBold();
     }
 
     private void setRegulationBold() {
-        String text = getString(R.string.testCertificateInformation);
-        SpannableString ss = new SpannableString(text);
-        StyleSpan boldText1 = new StyleSpan(Typeface.BOLD);
-        StyleSpan boldText2 = new StyleSpan(Typeface.BOLD);
-        ss.setSpan(boldText1, 4, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(boldText2, 362, 383, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        regulationInformationTextView.setText(ss);
+        String formattedRegulationText = getString(R.string.testCertificateInformation);
+        regulationInformationTextView.setText(Html.fromHtml(formattedRegulationText));
     }
 
-    private void initDateButton() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private void initDateButton(final Button button) {
+        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = " " + day + " / " + month + " / " + year;
-                chooseDateButton.setText(date);
+                Log.d("DateSetListener", "onDateSet: Setting text to " + date);
+                button.setText(date);
             }
         };
 
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int style = AlertDialog.THEME_HOLO_LIGHT;
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int style = AlertDialog.THEME_HOLO_LIGHT;
+                datePickerDialog = new DatePickerDialog(TestingCertificateDocumentActivity.this, style, dateSetListener, year, month, day);
+                datePickerDialog.show();
+            }
+        });
     }
 
-    public void chooseDateBtn(View view) {datePickerDialog.show();
+    public void chooseDateBtn(View view) {
+        datePickerDialog.show();
     }
 
     public void digitalSignatureOnPressed(View view) {

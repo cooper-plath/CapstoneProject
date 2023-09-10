@@ -186,11 +186,10 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/chooseDateBtn"
+                android:id="@+id/chooseDateBtn1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="chooseDateBtn"
-                android:text=" 1 / 1 / 2000" />
+                android:text="@string/exampleDate"/>
 
         </LinearLayout>
 
@@ -278,22 +277,40 @@
             android:layout_margin="10dp"
             android:text="Name"
             android:textAlignment="center" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/digitalSignatureBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_centerHorizontal="true"
+                android:onClick="digitalSignatureOnPressed"
+                android:text="Digital Signature"
+                />
+            <ImageView
+                android:id="@+id/signatureImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="2dp"
+                android:visibility="gone"
+                android:src="@drawable/baseline_check_circle_outline_24_white"
+                android:layout_alignRight="@+id/digitalSignatureBtn"
+                />
+
+        </RelativeLayout>
 
         <Button
-            android:id="@+id/digitalSignatureBtn"
+            android:id="@+id/chooseDateBtn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:onClick="digitalSignatureOnPressed"
-            android:text="Digital Signature" />
-
-        <ImageView
-            android:id="@+id/signatureImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp" />
-
+            android:text="@string/exampleDate"/>
     </LinearLayout>
 
 

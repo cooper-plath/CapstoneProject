@@ -1,5 +1,9 @@
 package com.example.capstoneproject;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -16,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -31,9 +36,8 @@ import java.io.FileOutputStream;
 
 public class digitalSignatureView extends AppCompatActivity  {
 
-    SignatureView signatureView;
-    Bitmap signatureBitmap;
-    Button doneBtn, clearBtn;
+    private SignatureView signatureView;
+    private Button doneBtn, clearBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +58,21 @@ public class digitalSignatureView extends AppCompatActivity  {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                convertSignatureToBitmap();
-                Intent data = new Intent();
-                data.putExtra("testString", "This is a test value");
-                setResult(RESULT_OK, data);
-                finish();
+                Bitmap signatureBitmap = signatureView.getSignatureBitmap();
+                if (signatureBitmap != null) {
+                    BitmapSingleton.getInstance().setSignatureBitmap(signatureBitmap);
+                    setResult(RESULT_OK);
+                    finish();
+                }
+//                Intent intentData = new Intent();
+//                intentData.putExtra("signatureBitmap", signatureBitmap);
+
+
 //                Bitmap bitmap = signatureView.getSignatureBitmap();
 //                Intent intent = new Intent(digitalSignatureView.this, TestingCertificateDocumentActivity.class);
 //                intent.putExtra("signatureBitmap", bitmap);
             }
         });
-
-
-    }
-    private void convertSignatureToBitmap() {
-        signatureBitmap = signatureView.getSignatureBitmap();
     }
 }
 

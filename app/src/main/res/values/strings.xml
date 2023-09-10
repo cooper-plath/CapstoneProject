@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CapstoneProject</string>
-    <string name="testCertificateInformation">For electrical installations, this certifies that the electrical installation, to the extent it is affected by the electrical work, has been tested to ensure that it is electrically safe and is in accordance with the requirements of the wiring rules and any other standard applying under the Electrical Safety Regulation 2013 to the electrical installation.\nFor electrical equipment, this certifies that the electrical equipment, to the extent it is affected by the electrical work, is electrically safe.</string>
+    <string name="testCertificateInformation"><![CDATA[For <b>electrical installations</b>, this certifies that the electrical installation, to the extent it is affected by the electrical work, has been tested to ensure that it is electrically safe and is in accordance with the requirements of the wiring rules and any other standard applying under the Electrical Safety Regulation 2013 to the electrical installation.\nFor <b>electrical equipment</b>, this certifies that the electrical equipment, to the extent it is affected by the electrical work, is electrically safe.]]></string>
     <string name="clear">Clear</string>
     <string name="done">Done</string>
+    <string name="exampleDate">1 / 1 / 2000</string>
 </resources>
