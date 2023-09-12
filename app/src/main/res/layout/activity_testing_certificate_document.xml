@@ -176,7 +176,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -189,7 +188,7 @@
                 android:id="@+id/chooseDateBtn1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/exampleDate"/>
+                android:text="@string/exampleDate" />
 
         </LinearLayout>
 
@@ -277,6 +276,7 @@
             android:layout_margin="10dp"
             android:text="Name"
             android:textAlignment="center" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -291,26 +291,54 @@
 
                 android:layout_centerHorizontal="true"
                 android:onClick="digitalSignatureOnPressed"
-                android:text="Digital Signature"
-                />
+                android:text="Digital Signature" />
+
             <ImageView
                 android:id="@+id/signatureImageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="2dp"
-                android:visibility="gone"
-                android:src="@drawable/baseline_check_circle_outline_24_white"
                 android:layout_alignRight="@+id/digitalSignatureBtn"
-                />
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/baseline_check_circle_outline_24_white"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/chooseDateBtn2"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exampleDate"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="Document completed on: "
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <Button
+
+                android:id="@+id/chooseDateBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/exampleDate" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/submitDocumentBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="15dp"
+            android:text="Submit"
+            android:textSize="20sp" />
     </LinearLayout>
 
 

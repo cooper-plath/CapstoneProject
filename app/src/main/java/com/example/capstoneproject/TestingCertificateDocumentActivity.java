@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
@@ -25,12 +26,13 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.capstoneproject.databinding.ActivityMainBinding;
+import com.example.capstoneproject.databinding.ActivityTestingCertificateDocumentBinding;
+
 import java.io.InputStream;
 import java.util.Calendar;
 
 public class TestingCertificateDocumentActivity extends AppCompatActivity {
-
-    private Button chooseDateButton1, chooseDateButton2;
 
     ActivityResultLauncher<Intent> signatureActivityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -40,37 +42,44 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
                     if (result == RESULT_OK) {
                         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
                         if (signatureBitmap != null) {
-                            signatureImageView.setVisibility(View.VISIBLE);
+                            binding.signatureImageView.setVisibility(View.VISIBLE);
 
                         }
                     }
                 }
             });
 
-    private ImageView signatureImageView;
-    private TextView regulationInformationTextView;
     private DatePickerDialog datePickerDialog;
+
+    private ActivityTestingCertificateDocumentBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_testing_certificate_document);
 
-        chooseDateButton1 = findViewById(R.id.chooseDateBtn1);
-        chooseDateButton2 = findViewById(R.id.chooseDateBtn2);
-        regulationInformationTextView = findViewById(R.id.regulationInformationTextView);
+        binding = ActivityTestingCertificateDocumentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        initDateButton(chooseDateButton1);
-        initDateButton(chooseDateButton2);
+        initDateButton(binding.chooseDateBtn1);
+        initDateButton(binding.chooseDateBtn2);
 
-
-        signatureImageView = findViewById(R.id.signatureImageView);
         setRegulationBold();
+        
+        binding.submitDocumentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                compileDocument();
+            }
+        });
+    }
+
+    private void compileDocument() {
+        PdfDocument testingCertificateDocument = new PdfDocument();
     }
 
     private void setRegulationBold() {
         String formattedRegulationText = getString(R.string.testCertificateInformation);
-        regulationInformationTextView.setText(Html.fromHtml(formattedRegulationText));
+        binding.regulationInformationTextView.setText(Html.fromHtml(formattedRegulationText));
     }
 
     private void initDateButton(final Button button) {
@@ -98,24 +107,8 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         });
     }
 
-    public void chooseDateBtn(View view) {
-        datePickerDialog.show();
-    }
-
     public void digitalSignatureOnPressed(View view) {
         Intent intent = new Intent(TestingCertificateDocumentActivity.this, digitalSignatureView.class);
-        //startActivityForResult(intent, 1);
         signatureActivityResultLauncher.launch(intent);
-
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1 && data != null) {
-//            Bundle bundle = data.getExtras();
-//            Bitmap signatureBitmap = (Bitmap) bundle.get("signatureBitmap");
-//            signatureImageView.setImageBitmap(signatureBitmap);
-//        }
-//    }
-
 }
