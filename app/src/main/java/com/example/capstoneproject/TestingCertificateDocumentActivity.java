@@ -34,8 +34,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
+import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.TypedValue;
@@ -48,6 +51,8 @@ import android.widget.Toast;
 
 import com.example.capstoneproject.databinding.ActivityMainBinding;
 import com.example.capstoneproject.databinding.ActivityTestingCertificateDocumentBinding;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -135,18 +140,18 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         Canvas canvas = documentPage.getCanvas();
 
         //Set black margin border dimensions and colour around document
-        float borderLeft = documentWidth - marginPx;
-        float borderRight = documentWidth -marginPx;
-        float borderTop = marginPx;
-        float borderBottom = marginPx;
-        Paint borderPaint = new Paint();
-        borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.BLACK);
-        borderPaint.setStrokeWidth(5);
+//        float borderLeft = documentWidth - marginPx;
+//        float borderRight = documentWidth -marginPx;
+//        float borderTop = marginPx;
+//        float borderBottom = marginPx;
+//        Paint borderPaint = new Paint();
+//        borderPaint.setStyle(Paint.Style.STROKE);
+//        borderPaint.setColor(Color.BLACK);
+//        borderPaint.setStrokeWidth(5);
 
         //Set border to document
-        RectF borderRect = new RectF(borderLeft, borderTop, borderRight, borderBottom);
-        canvas.drawRect(borderRect, borderPaint);
+//        RectF borderRect = new RectF(borderLeft, borderTop, borderRight, borderBottom);
+//        canvas.drawRect(borderRect, borderPaint);
 
         //Set Pinnacle Power banner at top of document
         Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pinnacle_banner);
@@ -154,36 +159,83 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
 
         Drawable checkedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_circle_outline_24);
-        int drawableWidth = 10;
-        int drawableHeight= 12;
+        int drawableWidth = 16;
+        int drawableHeight = 16;
 
-        //Set text size and colour for strings
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(12);
+        //Set text size and colour for regular strings
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(12);
 
-        float checkboxTextX = 225;
+        //Set text and size for bold text
+        Paint boldPaint = new Paint();
+        boldPaint.setColor(Color.BLACK);
+        boldPaint.setTextSize(18);
+        Typeface boldTypeFace = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
+        boldPaint.setTypeface(boldTypeFace);
 
-        canvas.drawText("CERTIFICATE OF: ", 100, 200, paint);
-        canvas.drawText("Testing and Safety", checkboxTextX, 220, paint);
-        canvas.drawText("Testing and Compliance", checkboxTextX, 180, paint);
+
+        float checkboxTextX = 250;
+        float textX = 80;
+
+        canvas.drawText("CERTIFICATE OF: ", 80, 200, boldPaint);
+        canvas.drawText("Testing and Safety", checkboxTextX, 220, boldPaint);
+        canvas.drawText("Testing and Compliance", checkboxTextX, 180, boldPaint);
 
 
         //Add checkboxes to top of document
         if (binding.testingAndComplianceCheckbox.isChecked()) {
-            checkedDrawable.setBounds((int) (checkboxTextX + paint.measureText("Testing and Compliance") + 5), 170, (int) (checkboxTextX + paint.measureText("Testing and Compliance") + 10) + drawableWidth, 170 + drawableHeight);
+            checkedDrawable.setBounds((int) (checkboxTextX + boldPaint.measureText("Testing and Compliance") + 5), 165, (int) (checkboxTextX + boldPaint.measureText("Testing and Compliance") + 10) + drawableWidth, 170 + drawableHeight);
             checkedDrawable.draw(canvas);
         }
         if (binding.testingAndSafetyCheckbox.isChecked()) {
-            checkedDrawable.setBounds((int) (checkboxTextX + paint.measureText("Testing and Safety") + 5), 210, (int) (checkboxTextX + paint.measureText("Testing and Safety") + 10) + drawableWidth, 210 + drawableHeight);
+            checkedDrawable.setBounds((int) (checkboxTextX + boldPaint.measureText("Testing and Safety") + 5), 205, (int) (checkboxTextX + boldPaint.measureText("Testing and Safety") + 10) + drawableWidth, 210 + drawableHeight);
             checkedDrawable.draw(canvas);
         }
 
-        canvas.drawText("Work performed by:", 110, 280, paint);
+        canvas.drawText("Work performed by:", textX, 250, textPaint);
 
-        canvas.drawText("Name: " + nameTitle + " " + nameGivenName + " " + nameSurname, 115, 300, paint);
+        canvas.drawText("Name: " + nameTitle + " " + nameGivenName + " " + nameSurname, textX + 5, 280, textPaint);
 
+        canvas.drawText("Address: " + addressStreet + " " + addressSuburb + " " + addressPostCode, textX + 5, 310, textPaint);
 
+        canvas.drawText("*Electrical installation / equipment tested", textX, 340, textPaint);
+
+        //Create text wrapping which places line breaks so text doesn't print off the document
+        if (workCompleted != null) {
+            TextPaint workCompletedPaint = new TextPaint();
+            StaticLayout staticLayout = new StaticLayout(workCompleted, workCompletedPaint, documentPageInfo.getPageWidth() - 150,
+                    Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            canvas.translate(textX, 360);
+            canvas.save();
+            staticLayout.draw(canvas);
+            canvas.restore();
+
+            int staticLayoutHeight = staticLayout.getHeight();
+            int staticLayoutWidth = staticLayout.getWidth();
+            Log.d("StaticHeight", "StaticHeight: " + staticLayoutHeight);
+            Log.d("StaticWidth", "StaticWidth: " + staticLayoutWidth);
+
+        }
+        canvas.drawText("Date of Test: " + dateBtn1, 0, 150, textPaint);
+        canvas.drawText("Electrical Contractor License Number: " + contractorLicenseNumber, textPaint.measureText("Date of Test: " + dateBtn1) + 50, 150, textPaint);
+
+        canvas.drawText("Name on Contractor License: " + contractorLicenseName, 0, 180, textPaint);
+
+        canvas.drawText("Electrical contractor phone number: " + contractorLicenseMobile, 0, 210, textPaint);
+
+        Bitmap regulationInfoBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.electrical_information);
+        Rect regulationInfoRect = new Rect(-2, 240, documentPageInfo.getPageWidth() - 150, 340);
+        canvas.drawBitmap(regulationInfoBitmap, null, regulationInfoRect, null);
+
+        canvas.drawText("Name: " + contractorFinalName, 0, 370, textPaint);
+        canvas.drawText("Date: " + dateBtn2, textPaint.measureText("Name: " + contractorFinalName) + 30, 370, textPaint);
+        canvas.drawText("Digital Signature: ", 0, 420, textPaint);
+        Log.d("Signature", "Signature: " + textPaint.measureText("DigitalSignature: "));
+
+        Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
+        Rect signatureRect = new Rect(105, 390, documentPageInfo.getPageWidth() - 350, 450);
+        canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
 
         testingCertificateDocument.finishPage(documentPage);
 
@@ -192,7 +244,6 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         File file = new File(fileDir, fileName);
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-
             testingCertificateDocument.writeTo(fileOutputStream);
             testingCertificateDocument.close();
             fileOutputStream.close();
