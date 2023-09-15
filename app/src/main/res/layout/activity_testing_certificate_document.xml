@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Testing Certificate"
+            android:text="@string/testing_certificate"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Certificate of: "
+                android:text="@string/certificate_of"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:text="Work performed for:"
+            android:text="@string/work_performed_for"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Name*: "
+            android:text="@string/name"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -81,14 +81,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Title" />
+                android:hint="@string/title" />
 
             <EditText
                 android:id="@+id/nameGivenNameEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Given name/s" />
+                android:hint="@string/given_name_s" />
 
             <EditText
                 android:id="@+id/nameSurnameEditText"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="Surname" />
+                android:hint="@string/surname" />
         </LinearLayout>
 
         <TextView
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Address*: "
+            android:text="@string/address"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="Street" />
+                android:hint="@string/street" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,15 +132,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:paddingEnd="100sp"
-                android:text="Suburb/Town" />
+                android:hint="@string/suburb_town"
+                android:paddingEnd="100sp" />
 
             <EditText
                 android:id="@+id/addressPostCodeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Postcode" />
+                android:hint="@string/postcode" />
 
         </LinearLayout>
 
@@ -149,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Electical installation / equipment tested*"
+            android:text="@string/electical_installation_equipment_tested"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -158,7 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:text="(Please include site address for electrical installation work if different from above)"
+            android:text="@string/please_include_site_address_for_electrical_installation_work_if_different_from_above"
             android:textSize="10sp" />
 
         <EditText
@@ -166,7 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Work completed:"
+            android:hint="@string/work_completed"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="* Date of test: "
+                android:text="@string/date_of_test"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -210,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="000000"
+                android:hint="@string/ElectricalLicenseExample"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -225,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Name on contractor license"
+                android:text="@string/name_on_contractor_license"
                 android:textStyle="bold" />
 
             <EditText
@@ -233,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="name"
+                android:hint="@string/name"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -248,7 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Electrical contractor phone number"
+                android:text="@string/electrical_contractor_phone_number"
                 android:textStyle="bold" />
 
             <EditText
@@ -256,7 +256,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="mobile"
+                android:hint="@string/mobile"
                 android:textAlignment="center" />
 
         </LinearLayout>
@@ -274,7 +274,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Name"
+            android:hint="@string/name"
             android:textAlignment="center" />
 
         <RelativeLayout
@@ -291,7 +291,7 @@
 
                 android:layout_centerHorizontal="true"
                 android:onClick="digitalSignatureOnPressed"
-                android:text="Digital Signature" />
+                android:text="@string/digital_signature" />
 
             <ImageView
                 android:id="@+id/signatureImageView"
@@ -317,7 +317,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="Document completed on: "
+                android:text="@string/document_completed_on"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -337,7 +337,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="15dp"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textSize="20sp" />
     </LinearLayout>
 

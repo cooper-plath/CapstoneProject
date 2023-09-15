@@ -4,4 +4,26 @@
     <string name="clear">Clear</string>
     <string name="done">Done</string>
     <string name="exampleDate">1 / 1 / 2000</string>
+    <string name="submit">Submit</string>
+    <string name="document_completed_on">Document completed on:</string>
+    <string name="digital_signature">Digital Signature</string>
+    <string name="name">Name</string>
+    <string name="mobile">mobile</string>
+    <string name="electrical_contractor_phone_number">Electrical contractor phone number</string>
+    <string name="name_on_contractor_license">Name on contractor license</string>
+    <string name="ElectricalLicenseExample">000000</string>
+    <string name="date_of_test">* Date of test:</string>
+    <string name="work_completed">Work completed:</string>
+    <string name="please_include_site_address_for_electrical_installation_work_if_different_from_above">(Please include site address for electrical installation work if different from above)</string>
+    <string name="electical_installation_equipment_tested">Electical installation / equipment tested*</string>
+    <string name="postcode">Postcode</string>
+    <string name="suburb_town">Suburb/Town</string>
+    <string name="street">Street</string>
+    <string name="address">Address*:</string>
+    <string name="surname">Surname</string>
+    <string name="given_name_s">Given name/s</string>
+    <string name="title">Title</string>
+    <string name="work_performed_for">Work performed for:</string>
+    <string name="certificate_of">Certificate of:</string>
+    <string name="testing_certificate">Testing Certificate</string>
 </resources>
