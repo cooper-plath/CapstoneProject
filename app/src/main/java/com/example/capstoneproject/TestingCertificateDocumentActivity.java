@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
@@ -129,8 +130,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
         int documentHeight = 842;
         int documentWidth = 595;
-        int borderMargin = 24;
-        float marginPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, borderMargin, getResources().getDisplayMetrics());
+        int borderMargin = 40;
 
         PdfDocument testingCertificateDocument = new PdfDocument();
         PdfDocument.PageInfo documentPageInfo = new PdfDocument.PageInfo.Builder(documentWidth, documentHeight, 1).create();
@@ -140,24 +140,28 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         Canvas canvas = documentPage.getCanvas();
 
         //Set black margin border dimensions and colour around document
-//        float borderLeft = documentWidth - marginPx;
-//        float borderRight = documentWidth -marginPx;
-//        float borderTop = marginPx;
-//        float borderBottom = marginPx;
-//        Paint borderPaint = new Paint();
-//        borderPaint.setStyle(Paint.Style.STROKE);
-//        borderPaint.setColor(Color.BLACK);
-//        borderPaint.setStrokeWidth(5);
+        float borderLeft = 40;
+        float borderRight = documentWidth - borderMargin;
+        float borderBottom = documentHeight - borderMargin;
+        Paint borderPaint = new Paint();
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.BLACK);
+        borderPaint.setStrokeWidth(2);
 
-        //Set border to document
-//        RectF borderRect = new RectF(borderLeft, borderTop, borderRight, borderBottom);
-//        canvas.drawRect(borderRect, borderPaint);
+        //Set border margin to document
+        RectF borderRect = new RectF(borderLeft, borderMargin, borderRight, borderBottom);
+        canvas.drawRect(borderRect, borderPaint);
 
         //Set Pinnacle Power banner at top of document
         Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pinnacle_banner);
-        Rect pinnacleBannerRect = new Rect(0, 0, documentPageInfo.getPageWidth(), 150);
+        Rect pinnacleBannerRect = new Rect(borderMargin + 2, borderMargin +  2, documentWidth - borderMargin - 2, 150);
         canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
 
+        //Set line stroke under banner
+        RectF lineStokeRectf = new RectF(borderMargin + 25, 151, documentWidth - borderMargin - 25, 151);
+        canvas.drawRect(lineStokeRectf, borderPaint);
+
+        //Set dimensions of checkmark drawable
         Drawable checkedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_circle_outline_24);
         int drawableWidth = 16;
         int drawableHeight = 16;
@@ -202,21 +206,21 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         canvas.drawText("*Electrical installation / equipment tested", textX, 340, textPaint);
 
         //Create text wrapping which places line breaks so text doesn't print off the document
-        if (workCompleted != null) {
-            TextPaint workCompletedPaint = new TextPaint();
-            StaticLayout staticLayout = new StaticLayout(workCompleted, workCompletedPaint, documentPageInfo.getPageWidth() - 150,
-                    Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-            canvas.translate(textX, 360);
-            canvas.save();
-            staticLayout.draw(canvas);
-            canvas.restore();
 
-            int staticLayoutHeight = staticLayout.getHeight();
-            int staticLayoutWidth = staticLayout.getWidth();
-            Log.d("StaticHeight", "StaticHeight: " + staticLayoutHeight);
-            Log.d("StaticWidth", "StaticWidth: " + staticLayoutWidth);
+        TextPaint workCompletedPaint = new TextPaint();
+        StaticLayout staticLayout = new StaticLayout(workCompleted, workCompletedPaint, documentPageInfo.getPageWidth() - 150,
+                Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        canvas.translate(textX, 360);
+        canvas.save();
+        staticLayout.draw(canvas);
+        canvas.restore();
 
-        }
+        int staticLayoutHeight = staticLayout.getHeight();
+        int staticLayoutWidth = staticLayout.getWidth();
+        Log.d("StaticHeight", "StaticHeight: " + staticLayoutHeight);
+        Log.d("StaticWidth", "StaticWidth: " + staticLayoutWidth);
+
+
         canvas.drawText("Date of Test: " + dateBtn1, 0, 150, textPaint);
         canvas.drawText("Electrical Contractor License Number: " + contractorLicenseNumber, textPaint.measureText("Date of Test: " + dateBtn1) + 50, 150, textPaint);
 
@@ -228,17 +232,18 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         Rect regulationInfoRect = new Rect(-2, 240, documentPageInfo.getPageWidth() - 150, 340);
         canvas.drawBitmap(regulationInfoBitmap, null, regulationInfoRect, null);
 
-        canvas.drawText("Name: " + contractorFinalName, 0, 370, textPaint);
-        canvas.drawText("Date: " + dateBtn2, textPaint.measureText("Name: " + contractorFinalName) + 30, 370, textPaint);
-        canvas.drawText("Digital Signature: ", 0, 420, textPaint);
-        Log.d("Signature", "Signature: " + textPaint.measureText("DigitalSignature: "));
+        canvas.drawText("Name: " + contractorFinalName, 0, 385, textPaint);
+        canvas.drawText("Date: " + dateBtn2, 0, 405, textPaint);
+        canvas.drawText("Digital Signature: ", 270, 385, textPaint);
 
+        //Retrieve digital signature bitmap and set dimensions
         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
-        Rect signatureRect = new Rect(105, 390, documentPageInfo.getPageWidth() - 350, 450);
+        Rect signatureRect = new Rect(375, 350, 445, 430);
         canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
 
         testingCertificateDocument.finishPage(documentPage);
 
+        //Output PDF
         File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String fileName = "TestingDocument.pdf";
         File file = new File(fileDir, fileName);
@@ -250,10 +255,8 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
             Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
 
         } catch (FileNotFoundException e) {
-            Log.e("FileLog", "Error writing to PDF: " + e.toString());
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e("FileLog", "IOException: " + e.toString());
             e.printStackTrace();
 
         }
@@ -286,6 +289,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         }
     }
 
+    //Set bold indentations for specific regulation text
     private void setRegulationBold() {
         String formattedRegulationText = getString(R.string.testCertificateInformation);
         binding.regulationInformationTextView.setText(Html.fromHtml(formattedRegulationText));
