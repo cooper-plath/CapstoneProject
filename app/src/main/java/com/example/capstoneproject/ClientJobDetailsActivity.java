@@ -33,4 +33,9 @@ public class ClientJobDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(ClientJobDetailsActivity.this, TestingCertificateDocumentActivity.class);
         startActivity(intent);
     }
+
+    public void visualInspectionOnPressed(View view) {
+        Intent intent = new Intent(ClientJobDetailsActivity.this, VisualInspectionDocumentActivity.class);
+        startActivity(intent);
+    }
 }

@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/addressEditText"
-            android:layout_width="250dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="@string/address"
@@ -35,10 +35,10 @@
             android:textSize="15sp" />
 
         <Button
-            android:id="@+id/dateBtn1"
+            android:id="@+id/visualDateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="20dp"
             android:text="@string/exampleDate"
             android:textSize="12sp" />
@@ -87,13 +87,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                >
+                android:id="@+id/tableLayoutCheckboxes">
 
                 <TableRow android:id="@+id/tableRow1">
 
@@ -1003,8 +1000,6 @@
                     android:text="@string/submit"
                     android:textSize="20sp" />
             </TableLayout>
-
-
 
     </ScrollView>
 

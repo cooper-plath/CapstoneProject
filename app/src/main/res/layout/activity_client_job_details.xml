@@ -36,4 +36,14 @@
         android:layout_marginTop="15dp"
         android:onClick="testingCertificateOnPressed"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visual Inspection Document"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:onClick="visualInspectionOnPressed"/>
+
 </LinearLayout>

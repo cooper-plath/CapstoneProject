@@ -4,6 +4,8 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.icu.lang.UCharacter.JoiningGroup.PE;
 
+import static com.example.capstoneproject.DatePickerHelper.initDateButton;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -79,8 +81,6 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
                 }
             });
 
-    private DatePickerDialog datePickerDialog;
-
     private ActivityTestingCertificateDocumentBinding binding;
 
     private static final int PERMISSION_REQUEST_CODE = 200;
@@ -92,8 +92,8 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         binding = ActivityTestingCertificateDocumentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        initDateButton(binding.chooseDateBtn1);
-        initDateButton(binding.chooseDateBtn2);
+        initDateButton(binding.chooseDateBtn1, this);
+        initDateButton(binding.chooseDateBtn2, this);
 
         setRegulationBold();
 
@@ -295,29 +295,6 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         binding.regulationInformationTextView.setText(Html.fromHtml(formattedRegulationText));
     }
 
-    private void initDateButton(final Button button) {
-        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                String date = " " + day + " / " + month + " / " + year;
-                button.setText(date);
-            }
-        };
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int style = AlertDialog.THEME_HOLO_LIGHT;
-                datePickerDialog = new DatePickerDialog(TestingCertificateDocumentActivity.this, style, dateSetListener, year, month, day);
-                datePickerDialog.show();
-            }
-        });
-    }
 
     public void digitalSignatureOnPressed(View view) {
         Intent intent = new Intent(TestingCertificateDocumentActivity.this, digitalSignatureView.class);
