@@ -102,19 +102,19 @@
                         android:textSize="15sp" />
 
                     <CheckBox
-                        android:id="@+id/checkboxYes"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
 
                     <CheckBox
-                        android:id="@+id/checkboxNo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
 
                     <CheckBox
-                        android:id="@+id/checkboxNA"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center" />
                 </TableRow>
 
                 <TableRow android:id="@+id/tableRow2">
