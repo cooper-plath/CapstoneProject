@@ -249,5 +249,15 @@
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
+            <Button
+                android:id="@+id/submitDocumentBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/actionsTakenEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/submit"
+                android:textSize="15sp" />
+
         </RelativeLayout>
     </ScrollView>

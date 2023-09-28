@@ -3,23 +3,8 @@ package com.example.capstoneproject;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.icu.lang.UCharacter.JoiningGroup.PE;
-
 import static com.example.capstoneproject.DatePickerHelper.initDateButton;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,38 +16,32 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
 import android.text.Layout;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.style.StyleSpan;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.capstoneproject.databinding.ActivityMainBinding;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.capstoneproject.databinding.ActivityTestingCertificateDocumentBinding;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
 
 public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
@@ -97,16 +76,13 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
         setRegulationBold();
 
-        binding.submitDocumentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkDocumentPermissions()) {
-                    generatePDF();
-                } else {
-                    requestDocumentPermission();
-                }
-
+        binding.submitDocumentBtn.setOnClickListener(view -> {
+            if (checkDocumentPermissions()) {
+                generatePDF();
+            } else {
+                requestDocumentPermission();
             }
+
         });
     }
 
@@ -127,7 +103,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         String dateBtn1 = binding.chooseDateBtn1.getText().toString();
         String dateBtn2 = binding.chooseDateBtn2.getText().toString();
 
-
+        //Set Height and Width of Document to A4
         int documentHeight = 842;
         int documentWidth = 595;
         int borderMargin = 40;
@@ -244,8 +220,9 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         testingCertificateDocument.finishPage(documentPage);
 
         //Output PDF
-        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         String fileName = "TestingDocument.pdf";
+        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
         File file = new File(fileDir, fileName);
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -254,11 +231,8 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
             fileOutputStream.close();
             Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
