@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addressTextView"
-        android:text="address textview"
+        android:text="@string/address_textview"
         android:textStyle="bold"
         android:textSize="25sp"
         android:gravity="center"
@@ -20,7 +19,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Required Documents"
+        android:text="@string/required_documents"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -29,7 +28,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Testing Certificate"
+        android:text="@string/testing_certificate"
         android:textSize="15sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -39,11 +38,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Visual Inspection Document"
+        android:text="@string/visual_inspection_document"
         android:textSize="15sp"
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginTop="15dp"
         android:onClick="visualInspectionOnPressed"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/incident_report_document"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:onClick="incidentReportOnPressed"/>
 
 </LinearLayout>

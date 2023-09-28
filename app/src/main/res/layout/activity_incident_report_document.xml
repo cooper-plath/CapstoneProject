@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    tools:context=".IncidentReportDocumentActivity">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/incident_report"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/name"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/incidentDateBtn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/nameEditText"
+                android:text="@string/exampleDate"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/roleEditText"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameEditText"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/role"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/digitalSignatureBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameEditText"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/roleEditText"
+                android:text="@string/digital_signature" />
+
+            <ImageView
+                android:id="@+id/signatureImageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_below="@id/incidentDateBtn1"
+                android:layout_alignEnd="@id/digitalSignatureBtn"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="33dp"
+                android:src="@drawable/baseline_check_circle_outline_24_white"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/incidentTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/roleEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:text="@string/incident"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/dateTimeEditText"
+                android:layout_width="400sp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/incidentTextView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/date_and_time_of_incident"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="#8D6E63"
+                android:textSize="15sp"
+                />
+
+            <EditText
+                android:id="@+id/personsInvolvedEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/dateTimeEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/name_s_of_person_s_involved_in_the_incident"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="#8D6E63"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/descriptionIncidentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/personsInvolvedEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/description_of_incident"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="#8D6E63"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/witnessEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/descriptionIncidentEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/witnesses_include_contact_details"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="#8D6E63"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/ReportingToTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/witnessEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:text="@string/reporting_of_the_incident"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/incidentReportedToTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ReportingToTextView"
+                android:layout_marginTop="15dp"
+                android:text="@string/incident_reported_to_please_tick"
+                android:textSize="15sp" />
+
+            <CheckBox
+                android:id="@+id/pinnacleOfficeCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/incidentReportedToTextView"
+                android:text="@string/pinnacle_office_dave_admin" />
+
+            <CheckBox
+                android:id="@+id/electricalSafetyOfficeCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pinnacleOfficeCheckbox"
+                android:text="@string/electrical_safety_office" />
+
+            <Button
+                android:id="@+id/incidentDateBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/electricalSafetyOfficeCheckbox"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/exampleDate"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/communicateMethodEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/incidentDateBtn2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/how_reported_this_form_in_person_email_phone"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/followUpActionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/communicateMethodEditText"
+                android:layout_marginTop="15dp"
+                android:text="@string/follow_up_action"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/treatmentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/followUpActionTextView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/was_treatment_received_following_the_injury_illness"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/actionsTakenEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/treatmentEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:hint="@string/description_of_actions_to_be_taken"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+    </ScrollView>

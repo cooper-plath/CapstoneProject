@@ -3,7 +3,7 @@
     <string name="testCertificateInformation"><![CDATA[For <b>electrical installations</b>, this certifies that the electrical installation, to the extent it is affected by the electrical work, has been tested to ensure that it is electrically safe and is in accordance with the requirements of the wiring rules and any other standard applying under the Electrical Safety Regulation 2013 to the electrical installation.\nFor <b>electrical equipment</b>, this certifies that the electrical equipment, to the extent it is affected by the electrical work, is electrically safe.]]></string>
     <string name="clear">Clear</string>
     <string name="done">Done</string>
-    <string name="exampleDate">1 / 1 / 2000</string>
+    <string name="exampleDate">Date</string>
     <string name="submit">Submit</string>
     <string name="document_completed_on">Document completed on:</string>
     <string name="digital_signature">Digital Signature</string>
@@ -68,4 +68,23 @@
     <string name="bedroom_4">Bedroom 4</string>
     <string name="bedroom_5">Bedroom 5</string>
     <string name="visual_inspection_checklist">Visual Inspection Checklist</string>
+    <string name="role">Role</string>
+    <string name="incident_report">Incident Report</string>
+    <string name="incident">Incident</string>
+    <string name="date_and_time_of_incident">Date and Time of Incident</string>
+    <string name="name_s_of_person_s_involved_in_the_incident">Name\'s of person/s involved in the incident</string>
+    <string name="description_of_incident">Description of Incident:</string>
+    <string name="address_textview">address textview</string>
+    <string name="required_documents">Required Documents</string>
+    <string name="visual_inspection_document">Visual Inspection Document</string>
+    <string name="incident_report_document">Incident Report Document</string>
+    <string name="witnesses_include_contact_details">Witnesses (Include contact details):</string>
+    <string name="reporting_of_the_incident">Reporting of the incident:</string>
+    <string name="description_of_actions_to_be_taken">Description of actions to be taken:</string>
+    <string name="how_reported_this_form_in_person_email_phone">How reported (This form, in person, email, phone):</string>
+    <string name="electrical_safety_office">Electrical Safety Office</string>
+    <string name="follow_up_action">Follow Up Action</string>
+    <string name="incident_reported_to_please_tick">Incident Reported to: (please tick)</string>
+    <string name="pinnacle_office_dave_admin">Pinnacle Office - Dave/Admin</string>
+    <string name="was_treatment_received_following_the_injury_illness">Was treatment received following the injury/illness?</string>
 </resources>

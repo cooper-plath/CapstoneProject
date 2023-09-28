@@ -38,4 +38,9 @@ public class ClientJobDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(ClientJobDetailsActivity.this, VisualInspectionDocumentActivity.class);
         startActivity(intent);
     }
+
+    public void incidentReportOnPressed(View view) {
+        Intent intent = new Intent(ClientJobDetailsActivity.this, IncidentReportDocumentActivity.class);
+        startActivity(intent);
+    }
 }
