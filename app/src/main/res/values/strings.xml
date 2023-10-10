@@ -87,4 +87,10 @@
     <string name="incident_reported_to_please_tick">Incident Reported to: (please tick)</string>
     <string name="pinnacle_office_dave_admin">Pinnacle Office - Dave/Admin</string>
     <string name="was_treatment_received_following_the_injury_illness">Was treatment received following the injury/illness?</string>
+    <string name="enter_hazard">Enter Hazard</string>
+    <string name="swms">SWMS</string>
+    <string name="site_specific_risk_assessment_form">Site Specific Risk Assessment Form</string>
+    <string name="employee_name">Employee Name:</string>
+    <string name="employee">Employee</string>
+    <string name="i_certify_that_the_above_control_measures_have_been_implemented_and_the_site_is_safe">I certify that the above control measures have been implemented and the site is safe.</string>
 </resources>

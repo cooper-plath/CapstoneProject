@@ -25,6 +25,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -77,11 +78,12 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         setRegulationBold();
 
         binding.submitDocumentBtn.setOnClickListener(view -> {
-            if (checkDocumentPermissions()) {
-                generatePDF();
-            } else {
-                requestDocumentPermission();
-            }
+//            if (checkDocumentPermissions()) {
+//                generatePDF();
+//            } else {
+//                requestDocumentPermission();
+//            }
+            generatePDF();
 
         });
     }
@@ -236,15 +238,6 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkDocumentPermissions() {
-        int writePermission = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
-        int readPermission = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
-        return writePermission == PackageManager.PERMISSION_GRANTED && readPermission == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestDocumentPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PE);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -274,7 +267,6 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         Intent intent = new Intent(TestingCertificateDocumentActivity.this, digitalSignatureView.class);
         signatureActivityResultLauncher.launch(intent);
     }
-
 
 }
 

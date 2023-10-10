@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/employeeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/employee"/>
+
+    <EditText
+        android:id="@+id/employeeEditText"
+        android:layout_below="@id/employeeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/employee_name"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/digitalSignatureBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/employeeEditText"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:onClick="digitalSignatureOnPressed"
+        android:text="@string/digital_signature" />
+
+    <ImageView
+        android:id="@+id/signatureImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_below="@id/employeeEditText"
+        android:layout_alignEnd="@+id/digitalSignatureBtn"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="38dp"
+        android:src="@drawable/baseline_check_circle_outline_24_white"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/chooseDateBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/digitalSignatureBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/exampleDate" />
+
+
+
+</RelativeLayout>

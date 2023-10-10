@@ -16,6 +16,9 @@
         android:theme="@style/Theme.CapstoneProject"
         tools:targetApi="31">
         <activity
+            android:name=".SiteSpecficRiskAssessmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".IncidentReportDocumentActivity"
             android:exported="false" />
         <activity

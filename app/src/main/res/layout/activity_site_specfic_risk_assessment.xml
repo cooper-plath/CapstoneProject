@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context=".SiteSpecficRiskAssessmentActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="SITE SPECIFIC RISK ASSESSMENT FORM"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/jobNumberEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="10dp"
+            android:hint="Job Number"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/tradesmenEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/jobNumberEditText"
+            android:hint="Form completed by"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/postCodeEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/jobNumberEditText"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:hint="Post Code"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/addressEditText"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tradesmenEditText"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/jobNumberEditText"
+            android:hint="Workplace location:"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/stateEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tradesmenEditText"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:hint="State:"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/digitalSignatureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postCodeEditText"
+            android:layout_marginTop="25dp"
+            android:onClick="digitalSignatureOnPressed"
+            android:text="@string/digital_signature" />
+
+        <ImageView
+            android:id="@+id/signatureImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_below="@id/postCodeEditText"
+            android:layout_alignRight="@+id/digitalSignatureBtn"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="38dp"
+            android:src="@drawable/baseline_check_circle_outline_24_white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/chooseDateBtn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addressEditText"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="25dp"
+            android:text="@string/exampleDate" />
+
+        <EditText
+            android:id="@+id/hazardCountEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/digitalSignatureBtn"
+            android:layout_centerHorizontal="true"
+            android:hint="How many hazards?"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:id="@+id/enterHazardContainerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hazardCountEditText"
+            android:orientation="vertical" />
+
+        <CheckBox
+            android:id="@+id/certifyCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/enterHazardContainerLayout"
+            android:text="@string/i_certify_that_the_above_control_measures_have_been_implemented_and_the_site_is_safe"/>
+
+        <EditText
+            android:id="@+id/tradesmenCountEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/certifyCheckbox"
+            android:layout_centerHorizontal="true"
+            android:hint="How many Employees?"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:id="@+id/enterTradesmenContainerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tradesmenCountEditText"
+            android:orientation="vertical" />
+
+
+        <Button
+            android:id="@+id/submitDocumentBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/enterTradesmenContainerLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/submit" />
+
+    </RelativeLayout>
+
+</ScrollView>
