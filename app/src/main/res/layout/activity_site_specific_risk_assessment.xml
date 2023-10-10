@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical"
-    tools:context=".SiteSpecficRiskAssessmentActivity">
+    tools:context=".SiteSpecificRiskAssessmentActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -27,19 +27,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
-            android:layout_marginLeft="10dp"
-            android:hint="Job Number"
-            android:textSize="12sp" />
+            android:layout_marginStart="10dp"
+            android:hint="@string/job_number"
+            android:textSize="12sp"
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/tradesmenEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/jobNumberEditText"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/jobNumberEditText"
             android:hint="Form completed by"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/postCodeEditText"
@@ -48,7 +50,7 @@
             android:layout_below="@+id/jobNumberEditText"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:hint="Post Code"
+            android:hint="@string/post_code"
             android:textSize="12sp" />
 
         <EditText
@@ -56,11 +58,12 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tradesmenEditText"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:layout_toRightOf="@id/jobNumberEditText"
-            android:hint="Workplace location:"
-            android:textSize="12sp" />
+            android:layout_toEndOf="@id/jobNumberEditText"
+            android:hint="@string/workplace_location"
+            android:textSize="12sp"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/stateEditText"
@@ -108,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/digitalSignatureBtn"
             android:layout_centerHorizontal="true"
-            android:hint="How many hazards?"
+            android:hint="@string/how_many_hazards"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -132,7 +135,8 @@
             android:layout_below="@id/certifyCheckbox"
             android:layout_centerHorizontal="true"
             android:hint="How many Employees?"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:inputType="TODO" />
 
         <LinearLayout
             android:id="@+id/enterTradesmenContainerLayout"

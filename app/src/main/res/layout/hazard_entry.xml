@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hazardLinearLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,12 +16,14 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/SWMSEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:hint="@string/swms"/>
 
         <EditText
+            android:id="@+id/taskEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -29,6 +32,7 @@
             android:inputType="textMultiLine"/>
 
         <EditText
+            android:id="@+id/hazardEntryEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -38,6 +42,7 @@
             android:inputType="textMultiLine"/>
 
         <EditText
+            android:id="@+id/riskEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -47,6 +52,7 @@
             android:inputType="textMultiLine"/>
 
         <EditText
+            android:id="@+id/rRatingEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -56,6 +62,7 @@
             />
 
         <EditText
+            android:id="@+id/controlEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -65,6 +72,7 @@
             android:inputType="textMultiLine"/>
 
         <EditText
+            android:id="@+id/heirarchyEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -74,6 +82,7 @@
             android:inputType="textMultiLine"/>
 
         <EditText
+            android:id="@+id/residualRatingEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"

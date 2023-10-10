@@ -94,4 +94,9 @@
     <string name="employee">Employee</string>
     <string name="i_certify_that_the_above_control_measures_have_been_implemented_and_the_site_is_safe">I certify that the above control measures have been implemented and the site is safe.</string>
     <string name="add_job">Add Job</string>
+    <string name="heirarchy_of_control">Hierarchy \n of \n control</string>
+    <string name="workplace_location">Workplace location:</string>
+    <string name="job_number">Job Number</string>
+    <string name="post_code">Post Code</string>
+    <string name="how_many_hazards">How many hazards?</string>
 </resources>

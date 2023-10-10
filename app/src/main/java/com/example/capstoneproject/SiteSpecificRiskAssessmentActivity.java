@@ -2,13 +2,22 @@ package com.example.capstoneproject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +27,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.capstoneproject.databinding.ActivitySiteSpecficRiskAssessmentBinding;
+import com.example.capstoneproject.databinding.ActivitySiteSpecificRiskAssessmentBinding;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+
 
 public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
@@ -37,13 +52,16 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
                 }
             });
 
-    ActivitySiteSpecficRiskAssessmentBinding binding;
+    ActivitySiteSpecificRiskAssessmentBinding binding;
+
+    private int hazardCount = 0;
+    private int employeeCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivitySiteSpecficRiskAssessmentBinding.inflate(getLayoutInflater());
+        binding = ActivitySiteSpecificRiskAssessmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //Remove Hazard Container
@@ -65,7 +83,7 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int hazardCount = 0;
+
                 try {
                     hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
                 } catch (NumberFormatException e) {
@@ -98,7 +116,6 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                int employeeCount = 0;
                 try {
                     employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
                 } catch (NumberFormatException e) {
@@ -122,13 +139,8 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
                 binding.submitDocumentBtn.setVisibility(View.VISIBLE);
             }
         });
-        
-        binding.submitDocumentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                generatePDF();
-            }
-        });
+
+        binding.submitDocumentBtn.setOnClickListener(view -> generatePDF());
 
 
     }
@@ -136,8 +148,12 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
     private void generatePDF() {
 
 
-        int documentHeight = 842;
-        int documentWidth = 595;
+//        int documentHeight = 842;
+//        int documentWidth = 595;
+//        int borderMargin = 40;
+
+        int documentHeight = 595;
+        int documentWidth = 842;
         int borderMargin = 40;
 
         PdfDocument SiteRiskAssessmentDocument = new PdfDocument();
@@ -145,57 +161,156 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
         PdfDocument.Page documentPage = SiteRiskAssessmentDocument.startPage(documentPageInfo);
 
-
         Canvas canvas = documentPage.getCanvas();
-        canvas.rotate(90);
 
 
-//        //Set Pinnacle Power banner at top of document
-//        Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner_abn);
-//        Rect pinnacleBannerRect = new Rect(30, 10, documentWidth - 30, 160);
-//        canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
-//
-//
-//        //Set dimensions of blank checkmark drawable
-//        Drawable checkedBlankDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_box_outline_blank_24);
-//
-//        //Set dimensions of blank checkmark drawable
-//        Drawable checkedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_box_24);
-//
-//        //Set text size and colour for regular strings
-//        Paint textPaint = new Paint();
-//        textPaint.setColor(Color.BLACK);
-//        textPaint.setTextSize(10);
-//
-//        //Set text and size for bold text
-//        Paint boldPaint = new Paint();
-//        boldPaint.setColor(Color.BLACK);
-//        boldPaint.setTextSize(12);
-//        Typeface boldTypeFace = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
-//        boldPaint.setTypeface(boldTypeFace);
-//
-//        //Set black margin border dimensions and colour around document
-//        Paint borderPaint = new Paint();
-//        borderPaint.setStyle(Paint.Style.STROKE);
-//        borderPaint.setColor(Color.BLACK);
-//        borderPaint.setStrokeWidth(0.5F);
-//
-//
-//        canvas.drawText("Address: " + binding.addressEditText.getText().toString(), 40, 180, textPaint);
-//        canvas.drawText("Date: " + binding.visualDateBtn.getText().toString(), 450, 180, textPaint);
-//
-//        float tableRowHeight = 25;
-//        float tableRowInitialY = 215;
-//        float columnInitialY = 190;
-//
-//        float columnLine1X = 450;
-//        float columnLine2X = 485;
-//        float columnLine3X = 520;
-//
-//
-//        //Draw rect table row for inspection activity and checkbox answers
-//        RectF lineStokeRectf = new RectF(borderMargin, 190, documentWidth - borderMargin, 190 + tableRowHeight);
-//        canvas.drawRect(lineStokeRectf, borderPaint);
+
+
+        //Set Pinnacle Power banner at top of document
+        Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner_abn);
+        Rect pinnacleBannerRect = new Rect(documentWidth /2 - 265, 0, documentWidth /2 + 265, 105);
+        canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
+
+        //Set text size and colour for regular strings
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(10);
+
+        //Set text and size for bold regular text
+        Paint boldPaint = new Paint();
+        boldPaint.setColor(Color.BLACK);
+        boldPaint.setTextSize(10);
+        Typeface boldTypeFace = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
+        boldPaint.setTypeface(boldTypeFace);
+
+        //Set text and size for bold title text
+        Paint boldTitlePaint = new Paint();
+        boldTitlePaint.setColor(Color.BLACK);
+        boldTitlePaint.setTextSize(12);
+        Typeface boldTitleTypeFace = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
+        boldTitlePaint.setTypeface(boldTitleTypeFace);
+
+        //Set black margin border dimensions and colour around document
+        Paint borderPaint = new Paint();
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.BLACK);
+        borderPaint.setStrokeWidth(0.5F);
+
+
+        canvas.drawText("SITE SPECIFIC RISK ASSESSMENT FORM", borderMargin, 130, boldTitlePaint);
+        canvas.drawText("Job Number: " + binding.jobNumberEditText.getText().toString(), borderMargin, 145, textPaint);
+        canvas.drawText("Workplace Location (Address): " + binding.addressEditText.getText().toString(), borderMargin, 160, textPaint);
+        canvas.drawText("Form Completed by: " + binding.tradesmenEditText.getText().toString(), borderMargin, 175, textPaint);
+
+        canvas.drawText("Date: " + binding.chooseDateBtn1.getText().toString(), documentWidth/2, 145, textPaint);
+        canvas.drawText("Post Code: " + binding.postCodeEditText.getText().toString(), documentWidth/2, 160, textPaint);
+        canvas.drawText("State: " + binding.stateEditText.getText().toString(), documentWidth/2, 175, textPaint);
+
+        //Retrieve digital signature bitmap and set dimensions
+        canvas.drawText("Signed: ", documentWidth/2 + 100, 145, textPaint);
+        Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
+        Rect signatureRect = new Rect(documentWidth/2 + 140, 145, 650, 175);
+        canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
+
+        canvas.drawText("All persons in the work party must participate in the risk assessment and sign this form.", borderMargin, 205, boldPaint);
+
+
+
+        //Draw rect table row for inspection activity and checkbox answers
+        RectF lineStokeRectf = new RectF(borderMargin, 210, documentWidth - borderMargin, 500);
+        canvas.drawRect(lineStokeRectf, borderPaint);
+
+        //Create titles for table layout
+        canvas.drawText("SWMS", 50, 235, boldPaint);
+        canvas.drawText("Task", 100, 235, boldPaint);
+        canvas.drawText("Hazards", 250, 235, boldPaint);
+        canvas.drawText("Risks", 350, 235, boldPaint);
+        canvas.drawText("Risk Rating", 450, 235, boldPaint);
+        canvas.drawText("Controls", 510, 235, boldPaint);
+
+        String text1 = "Heirarchy of Control";
+        String text2 = "Residual Risk Rating";
+
+        int text1Y = 225;
+        String[] lines1 = text1.split(" ");
+        for (String line : lines1) {
+            canvas.drawText(line, 680, text1Y, boldPaint);
+            text1Y += boldPaint.getTextSize();
+        }
+        int text2Y = 225;
+        String[] lines2 = text2.split(" ");
+        for (String line : lines2) {
+            canvas.drawText(line, 740, text2Y, boldPaint);
+            text2Y += boldPaint.getTextSize();
+        }
+
+        float tableRowHeight = 20;
+        float tableRowInitialY = 250;
+        float columnInitialY = 190;
+
+        float columnLine1X = 95;
+        float columnLine2X = 245;
+        float columnLine3X = 345;
+        float columnLine4X = 445;
+        float columnLine5X = 505;
+        float columnLine6X = 675;
+        float columnLine7X = 735;
+
+        canvas.drawLine(borderMargin, tableRowInitialY, documentWidth - borderMargin, tableRowInitialY, borderPaint);
+
+        canvas.drawLine(columnLine1X, 210, columnLine1X, 250, borderPaint);
+        canvas.drawLine(columnLine2X, 210, columnLine2X, 250, borderPaint);
+        canvas.drawLine(columnLine3X, 210, columnLine3X, 250, borderPaint);
+        canvas.drawLine(columnLine4X, 210, columnLine4X, 250, borderPaint);
+        canvas.drawLine(columnLine5X, 210, columnLine5X, 250, borderPaint);
+        canvas.drawLine(columnLine6X, 210, columnLine6X, 250, borderPaint);
+        canvas.drawLine(columnLine7X, 210, columnLine7X, 250, borderPaint);
+
+
+        //Collect EditText inputs for each hazardContainer
+        float lineColumnY = 250;
+        float textY = 262;
+
+        for (int i = 0; i < binding.enterHazardContainerLayout.getChildCount(); i++) {
+            LinearLayout hazardLinearLayout = (LinearLayout) binding.enterHazardContainerLayout.getChildAt(i);
+
+            EditText SWMNSEditText = hazardLinearLayout.findViewById(R.id.SWMSEditText);
+            EditText taskEditText = hazardLinearLayout.findViewById(R.id.taskEditText);
+            EditText hazardEditText = hazardLinearLayout.findViewById(R.id.hazardEntryEditText);
+            EditText riskEditText = hazardLinearLayout.findViewById(R.id.riskEditText);
+            EditText riskRatingEditText = hazardLinearLayout.findViewById(R.id.rRatingEditText);
+            EditText controlEditText = hazardLinearLayout.findViewById(R.id.controlEditText);
+            EditText heirarchyOfControlEditText = hazardLinearLayout.findViewById(R.id.heirarchyEditText);
+            EditText residualRiskRatingEditText = hazardLinearLayout.findViewById(R.id.residualRatingEditText);
+
+            canvas.drawText(SWMNSEditText.getText().toString(), 50, textY, textPaint);
+            canvas.drawText(taskEditText.getText().toString(), 100, textY, textPaint);
+            canvas.drawText(hazardEditText.getText().toString(), 250, textY, textPaint);
+            canvas.drawText(riskEditText.getText().toString(), 350, textY, textPaint);
+            canvas.drawText(riskRatingEditText.getText().toString(), 450, textY, textPaint);
+            canvas.drawText(controlEditText.getText().toString(), 510, textY, textPaint);
+            canvas.drawText(heirarchyOfControlEditText.getText().toString(), 680, textY, textPaint);
+            canvas.drawText(residualRiskRatingEditText.getText().toString(), 740, textY, textPaint);
+
+            canvas.drawLine(columnLine1X, lineColumnY, columnLine1X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine2X, lineColumnY, columnLine2X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine3X, lineColumnY, columnLine3X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine4X, lineColumnY, columnLine4X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine5X, lineColumnY, columnLine5X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine6X, lineColumnY, columnLine6X, lineColumnY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine7X, lineColumnY, columnLine7X, lineColumnY + tableRowHeight, borderPaint);
+
+            canvas.drawLine(borderMargin, lineColumnY + tableRowHeight, documentWidth - borderMargin, lineColumnY + tableRowHeight, borderPaint);
+
+            textY += tableRowHeight;
+            lineColumnY += tableRowHeight;
+        }
+
+
+
+
+
+
 //
 //
 //        //Establish headers for table rows
@@ -416,22 +531,22 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 //        canvas2.drawLine(columnLine3X, columnInitialYPage2, columnLine3X, columnInitialYPage2 + tableRowHeight, borderPaint);
 //
 //
-//        visualInspectionDocument.finishPage(documentPage2);
-//
-//        //Output PDF
-//        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-//        String fileName = "VisualInspectionDocument.pdf";
-//        File file = new File(fileDir, fileName);
-//        try {
-//            FileOutputStream fileOutputStream = new FileOutputStream(file);
-//            visualInspectionDocument.writeTo(fileOutputStream);
-//            visualInspectionDocument.close();
-//            fileOutputStream.close();
-//            Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        SiteRiskAssessmentDocument.finishPage(documentPage);
+
+        //Output PDF
+        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        String fileName = "SiteSpecificRiskAssessment.pdf";
+        File file = new File(fileDir, fileName);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            SiteRiskAssessmentDocument.writeTo(fileOutputStream);
+            SiteRiskAssessmentDocument.close();
+            fileOutputStream.close();
+            Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void digitalSignatureOnPressed(View view) {
