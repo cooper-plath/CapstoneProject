@@ -17,8 +17,6 @@ public class ClientDB extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String TABLE_NAME = "myjobcard";
     private static final String ID_COL = "id";
-    private static final String CLIENT_NAME = "name";
-    private static final String CLIENT_EMAIL = "email";
     private static final String CLIENT_ADDRESS = "address";
 
     public ClientDB(Context context) {
@@ -29,18 +27,16 @@ public class ClientDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query = " CREATE TABLE " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + CLIENT_NAME + " TEXT,"
                 + CLIENT_ADDRESS + " TEXT)";
         db.execSQL(query);
     }
 
-    public void addNewJobCard(String clientName, String clientAddress) {
+    public void addNewJobCard(String clientAddress) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(CLIENT_NAME, clientName);
         values.put(CLIENT_ADDRESS, clientAddress);
 
         db.insert(TABLE_NAME, null, values);
@@ -77,15 +73,12 @@ public class ClientDB extends SQLiteOpenHelper {
     }
 
     public boolean deleteClientEntry(String id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        try {
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
             int result = db.delete(TABLE_NAME, ID_COL + " = ?", new String[]{String.valueOf(id)});
             return result != -1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            db.close();
         }
     }
 

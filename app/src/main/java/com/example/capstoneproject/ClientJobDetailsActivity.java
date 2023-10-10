@@ -46,7 +46,7 @@ public class ClientJobDetailsActivity extends AppCompatActivity {
 
 
     public void siteSpecificOnPressed(View view) {
-        Intent intent = new Intent(ClientJobDetailsActivity.this, SiteSpecficRiskAssessmentActivity.class);
+        Intent intent = new Intent(ClientJobDetailsActivity.this, SiteSpecificRiskAssessmentActivity.class);
         startActivity(intent);
     }
 }

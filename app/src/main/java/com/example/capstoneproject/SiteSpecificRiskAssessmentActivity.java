@@ -1,43 +1,26 @@
 package com.example.capstoneproject;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.pdf.PdfDocument;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
-import android.os.Bundle;
-import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.capstoneproject.databinding.ActivitySiteSpecficRiskAssessmentBinding;
-import com.example.capstoneproject.databinding.ActivityTestingCertificateDocumentBinding;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class SiteSpecficRiskAssessmentActivity extends AppCompatActivity {
+public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> signatureActivityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -86,7 +69,7 @@ public class SiteSpecficRiskAssessmentActivity extends AppCompatActivity {
                 try {
                     hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
                 } catch (NumberFormatException e) {
-                    Toast.makeText(SiteSpecficRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
                 }
 
                 int hazardTitleInteger = 1;
@@ -119,14 +102,14 @@ public class SiteSpecficRiskAssessmentActivity extends AppCompatActivity {
                 try {
                     employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
                 } catch (NumberFormatException e) {
-                    Toast.makeText(SiteSpecficRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
                 }
                 int employeeTitleInteger = 1;
                 for (int b = 0; b < employeeCount; b++) {
                     View employeeContainerLayout = getLayoutInflater().inflate(R.layout.tradesmen_entry, null);
                     TextView employeeTitle = employeeContainerLayout.findViewById(R.id.employeeTextView);
                     Button employeeDateButton = employeeContainerLayout.findViewById(R.id.chooseDateBtn);
-                    DatePickerHelper.initDateButton(employeeDateButton, SiteSpecficRiskAssessmentActivity.this);
+                    DatePickerHelper.initDateButton(employeeDateButton, SiteSpecificRiskAssessmentActivity.this);
                     employeeTitle.setText("Employee " + employeeTitleInteger);
                     binding.enterTradesmenContainerLayout.addView(employeeContainerLayout);
                     employeeTitleInteger++;
@@ -452,7 +435,7 @@ public class SiteSpecficRiskAssessmentActivity extends AppCompatActivity {
     }
 
     public void digitalSignatureOnPressed(View view) {
-        Intent intent = new Intent(SiteSpecficRiskAssessmentActivity.this, digitalSignatureView.class);
+        Intent intent = new Intent(SiteSpecificRiskAssessmentActivity.this, digitalSignatureView.class);
         signatureActivityResultLauncher.launch(intent);
     }
 }

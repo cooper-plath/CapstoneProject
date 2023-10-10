@@ -93,4 +93,5 @@
     <string name="employee_name">Employee Name:</string>
     <string name="employee">Employee</string>
     <string name="i_certify_that_the_above_control_measures_have_been_implemented_and_the_site_is_safe">I certify that the above control measures have been implemented and the site is safe.</string>
+    <string name="add_job">Add Job</string>
 </resources>
