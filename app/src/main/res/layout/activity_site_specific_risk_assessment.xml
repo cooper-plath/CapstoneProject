@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/postCodeEditText"
             android:layout_marginTop="25dp"
-            android:onClick="digitalSignatureOnPressed"
+
             android:text="@string/digital_signature" />
 
         <ImageView
@@ -112,6 +112,7 @@
             android:layout_below="@id/digitalSignatureBtn"
             android:layout_centerHorizontal="true"
             android:hint="@string/how_many_hazards"
+            android:inputType="number"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -136,7 +137,7 @@
             android:layout_centerHorizontal="true"
             android:hint="How many Employees?"
             android:textAlignment="center"
-            android:inputType="TODO" />
+            android:inputType="number" />
 
         <LinearLayout
             android:id="@+id/enterTradesmenContainerLayout"

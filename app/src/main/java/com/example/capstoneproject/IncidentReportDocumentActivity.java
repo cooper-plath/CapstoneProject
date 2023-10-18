@@ -39,6 +39,7 @@ public class IncidentReportDocumentActivity extends AppCompatActivity {
                     int result = activityResult.getResultCode();
                     if (result == RESULT_OK) {
                         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
+                        //Clear bitmap from list
                         if (signatureBitmap != null) {
                             binding.signatureImageView.setVisibility(View.VISIBLE);
 
@@ -52,6 +53,7 @@ public class IncidentReportDocumentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BitmapSingleton.getInstance().clearMultipleSignatureBitmaps();
 
         binding = ActivityIncidentReportDocumentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -117,6 +119,7 @@ public class IncidentReportDocumentActivity extends AppCompatActivity {
         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
         Rect signatureRect = new Rect((int) (textInitialX + textPaint.measureText("Signature: ")), 205, (documentWidth / 2) - 65, 248);
         canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
+        BitmapSingleton.getInstance().clearSignatureBitmap();
 
         canvas.drawText("Incident", textInitialX, 280, boldPaint);
         PDFBorderRectHelper.drawLinedRect(canvas, 0.5f, 282, 480);

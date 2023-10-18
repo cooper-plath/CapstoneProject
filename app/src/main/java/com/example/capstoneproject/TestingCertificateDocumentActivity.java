@@ -53,6 +53,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
                     int result = activityResult.getResultCode();
                     if (result == RESULT_OK) {
                         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
+
                         if (signatureBitmap != null) {
                             binding.signatureImageView.setVisibility(View.VISIBLE);
 
@@ -68,7 +69,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        BitmapSingleton.getInstance().clearMultipleSignatureBitmaps();
         binding = ActivityTestingCertificateDocumentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -218,6 +219,8 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
         Rect signatureRect = new Rect(375, 350, 445, 430);
         canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
+        //Clear bitmap from list
+        BitmapSingleton.getInstance().clearSignatureBitmap();
 
         testingCertificateDocument.finishPage(documentPage);
 

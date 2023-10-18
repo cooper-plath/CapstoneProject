@@ -2,12 +2,16 @@ package com.example.capstoneproject;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BitmapSingleton {
     private static BitmapSingleton instance;
+    private List<Bitmap> signatureBitmaps;
     private Bitmap signatureBitmap;
 
     private BitmapSingleton() {
-        // Private constructor to prevent instantiation
+        signatureBitmaps = new ArrayList<>();
     }
 
     public static BitmapSingleton getInstance() {
@@ -17,12 +21,24 @@ public class BitmapSingleton {
         return instance;
     }
 
+    public List<Bitmap> getMultipleSignatureBitmaps() {
+        return signatureBitmaps;
+    }
+
+    public void addSignatureBitmap(Bitmap signatureBitmap) {
+        this.signatureBitmap = signatureBitmap;
+        signatureBitmaps.add(signatureBitmap);
+    }
+
     public Bitmap getSignatureBitmap() {
         return signatureBitmap;
     }
 
-    public void setSignatureBitmap(Bitmap signatureBitmap) {
-        this.signatureBitmap = signatureBitmap;
+    public void clearSignatureBitmap() {
+        signatureBitmap = null;
+    }
+
+    public void clearMultipleSignatureBitmaps() {
+        signatureBitmaps.clear();
     }
 }
-

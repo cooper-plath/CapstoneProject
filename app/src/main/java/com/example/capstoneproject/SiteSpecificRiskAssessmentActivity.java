@@ -9,15 +9,18 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +29,16 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.capstoneproject.databinding.ActivitySiteSpecificRiskAssessmentBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
@@ -43,10 +49,14 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult activityResult) {
                     int result = activityResult.getResultCode();
                     if (result == RESULT_OK) {
+                        int employeeId = activityResult.getData().getIntExtra("employeeId", -1);
                         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
                         if (signatureBitmap != null) {
-                            binding.signatureImageView.setVisibility(View.VISIBLE);
-
+                            if (employeeId == 0) {
+                                binding.signatureImageView.setVisibility(View.VISIBLE);
+                            } else {
+                                handleSignatureResult(employeeId, signatureBitmap);
+                            }
                         }
                     }
                 }
@@ -54,8 +64,12 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
     ActivitySiteSpecificRiskAssessmentBinding binding;
 
+    private Map<Integer, Bitmap> signatureMap = new HashMap<>(); // Use this map to store signature bitmaps for employees.
+
     private int hazardCount = 0;
     private int employeeCount = 0;
+
+    private String employeeSignatureImageViewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +77,8 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
         binding = ActivitySiteSpecificRiskAssessmentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        BitmapSingleton.getInstance().clearMultipleSignatureBitmaps();
 
         //Remove Hazard Container
         binding.enterHazardContainerLayout.removeAllViews();
@@ -75,82 +91,135 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         binding.certifyCheckbox.setVisibility(View.INVISIBLE);
 
         //Add text listener for when user inputs number of hazards for site
-        binding.hazardCountEditText.addTextChangedListener(new TextWatcher() {
+        binding.hazardCountEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                try {
-                    hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                    try {
+                        hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
+                        if (hazardCount < 1) {
+                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
+                        } else {
+                            updateHazardViews(hazardCount);
+                            binding.certifyCheckbox.setVisibility(View.VISIBLE);
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-                int hazardTitleInteger = 1;
-                for (int a = 0; a < hazardCount; a++) {
-                    View hazardContainerLayout = getLayoutInflater().inflate(R.layout.hazard_entry, null);
-                    TextView hazardTitle = hazardContainerLayout.findViewById(R.id.hazardTitleTextView);
-                    hazardTitle.setText("Hazard " + hazardTitleInteger);
-                    binding.enterHazardContainerLayout.addView(hazardContainerLayout);
-                    hazardTitleInteger++;
-                }
-
+                return false;
             }
+        });
 
+        //Check if checkbox is clicked and set visibility of next edittext to visible
+        binding.certifyCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void onClick(View view) {
                 binding.tradesmenCountEditText.setVisibility(View.VISIBLE);
-                binding.certifyCheckbox.setVisibility(View.VISIBLE);
             }
         });
 
-        binding.tradesmenCountEditText.addTextChangedListener(new TextWatcher() {
+        //Add text listener for when user inputs number of employees for site
+        binding.tradesmenCountEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Do nothing
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
-                } catch (NumberFormatException e) {
-                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
-                }
-                int employeeTitleInteger = 1;
-                for (int b = 0; b < employeeCount; b++) {
-                    View employeeContainerLayout = getLayoutInflater().inflate(R.layout.tradesmen_entry, null);
-                    TextView employeeTitle = employeeContainerLayout.findViewById(R.id.employeeTextView);
-                    Button employeeDateButton = employeeContainerLayout.findViewById(R.id.chooseDateBtn);
-                    DatePickerHelper.initDateButton(employeeDateButton, SiteSpecificRiskAssessmentActivity.this);
-                    employeeTitle.setText("Employee " + employeeTitleInteger);
-                    binding.enterTradesmenContainerLayout.addView(employeeContainerLayout);
-                    employeeTitleInteger++;
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                    try {
+                        employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
+                        if (employeeCount < 1) {
+                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
+                        } else {
+                            updateEmployeeViews(employeeCount);
+                            binding.submitDocumentBtn.setVisibility(View.VISIBLE);
+                        }
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                binding.submitDocumentBtn.setVisibility(View.VISIBLE);
+                return false;
             }
         });
+
+        try {
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+        }
+
 
         binding.submitDocumentBtn.setOnClickListener(view -> generatePDF());
+        binding.digitalSignatureBtn.setOnClickListener(view -> digitalSignatureOnPressed(0));
+
+    }
+
+    private void updateEmployeeViews(int employeeCount) {
+        // Clear existing views
+        binding.enterTradesmenContainerLayout.removeAllViews();
+
+        int employeeIDInteger = 1;
+        for (int b = 0; b < employeeCount; b++) {
+            View employeeContainerLayout = getLayoutInflater().inflate(R.layout.tradesmen_entry, null);
+            TextView employeeTitle = employeeContainerLayout.findViewById(R.id.employeeTextView);
+            Button employeeDateButton = employeeContainerLayout.findViewById(R.id.employeeDateBtn);
+            Button employeeSignatureButton = employeeContainerLayout.findViewById(R.id.digitalSignatureBtn1);
+            ImageView signatureImageView = employeeContainerLayout.findViewById(R.id.employeeSignatureImageView);
+
+            DatePickerHelper.initDateButton(employeeDateButton, SiteSpecificRiskAssessmentActivity.this);
+
+            employeeTitle.setText("Employee " + employeeIDInteger);
+
+            employeeSignatureImageViewId = "signatureImageView" + employeeIDInteger;
+
+            signatureImageView.setId(View.generateViewId());
+            signatureImageView.setTag(employeeSignatureImageViewId);
+
+            binding.enterTradesmenContainerLayout.addView(employeeContainerLayout);
 
 
+            int finalEmployeeIDInteger = employeeIDInteger;
+            employeeSignatureButton.setOnClickListener(view -> digitalSignatureOnPressed(finalEmployeeIDInteger));
+            employeeIDInteger++;
+        }
+
+    }
+
+    //If user clicks on digitalSignatureButton
+    public void digitalSignatureOnPressed(int employeeIDInteger) {
+        Intent intent = new Intent(SiteSpecificRiskAssessmentActivity.this, digitalSignatureView.class);
+            intent.putExtra("employeeId", employeeIDInteger);
+            signatureActivityResultLauncher.launch(intent);
+    }
+
+    //Displays checkmark icon once user enters successful digital signature on activity
+    public void handleSignatureResult(int employeeId, Bitmap signatureBitmap) {
+        // Store the signature bitmap in the map
+        signatureMap.put(employeeId, signatureBitmap);
+        String signatureImageViewId = "signatureImageView" + employeeId;
+
+        // Display the signature in the corresponding ImageView
+        ImageView signatureImageView = binding.enterTradesmenContainerLayout.findViewWithTag(signatureImageViewId);
+        signatureImageView.setVisibility(View.VISIBLE);
+    }
+
+
+    private void updateHazardViews(int newHazardCount) {
+        // Clear existing views
+        binding.enterHazardContainerLayout.removeAllViews();
+
+        int hazardTitleInteger = 1;
+        for (int a = 0; a < newHazardCount; a++) {
+            View hazardContainerLayout = getLayoutInflater().inflate(R.layout.hazard_entry, null);
+            TextView hazardTitle = hazardContainerLayout.findViewById(R.id.hazardTitleTextView);
+            hazardTitle.setText("Hazard " + hazardTitleInteger);
+            binding.enterHazardContainerLayout.addView(hazardContainerLayout);
+            hazardTitleInteger++;
+        }
     }
 
     private void generatePDF() {
 
-
-//        int documentHeight = 842;
-//        int documentWidth = 595;
-//        int borderMargin = 40;
 
         int documentHeight = 595;
         int documentWidth = 842;
@@ -164,11 +233,9 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         Canvas canvas = documentPage.getCanvas();
 
 
-
-
         //Set Pinnacle Power banner at top of document
         Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.banner_abn);
-        Rect pinnacleBannerRect = new Rect(documentWidth /2 - 265, 0, documentWidth /2 + 265, 105);
+        Rect pinnacleBannerRect = new Rect(documentWidth / 2 - 265, 0, documentWidth / 2 + 265, 105);
         canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
 
         //Set text size and colour for regular strings
@@ -202,18 +269,17 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         canvas.drawText("Workplace Location (Address): " + binding.addressEditText.getText().toString(), borderMargin, 160, textPaint);
         canvas.drawText("Form Completed by: " + binding.tradesmenEditText.getText().toString(), borderMargin, 175, textPaint);
 
-        canvas.drawText("Date: " + binding.chooseDateBtn1.getText().toString(), documentWidth/2, 145, textPaint);
-        canvas.drawText("Post Code: " + binding.postCodeEditText.getText().toString(), documentWidth/2, 160, textPaint);
-        canvas.drawText("State: " + binding.stateEditText.getText().toString(), documentWidth/2, 175, textPaint);
+        canvas.drawText("Date: " + binding.chooseDateBtn1.getText().toString(), documentWidth / 2, 145, textPaint);
+        canvas.drawText("Post Code: " + binding.postCodeEditText.getText().toString(), documentWidth / 2, 160, textPaint);
+        canvas.drawText("State: " + binding.stateEditText.getText().toString(), documentWidth / 2, 175, textPaint);
 
         //Retrieve digital signature bitmap and set dimensions
-        canvas.drawText("Signed: ", documentWidth/2 + 100, 145, textPaint);
+        canvas.drawText("Signed: ", documentWidth / 2 + 100, 145, textPaint);
         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
-        Rect signatureRect = new Rect(documentWidth/2 + 140, 145, 650, 175);
+        Rect signatureRect = new Rect(documentWidth / 2 + 140, 145, 650, 175);
         canvas.drawBitmap(signatureBitmap, null, signatureRect, null);
 
         canvas.drawText("All persons in the work party must participate in the risk assessment and sign this form.", borderMargin, 205, boldPaint);
-
 
 
         //Draw rect table row for inspection activity and checkbox answers
@@ -228,7 +294,7 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         canvas.drawText("Risk Rating", 450, 235, boldPaint);
         canvas.drawText("Controls", 510, 235, boldPaint);
 
-        String text1 = "Heirarchy of Control";
+        String text1 = "Hierarchy of Control";
         String text2 = "Residual Risk Rating";
 
         int text1Y = 225;
@@ -244,9 +310,8 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
             text2Y += boldPaint.getTextSize();
         }
 
-        float tableRowHeight = 20;
+        float tableRowHeight = 15;
         float tableRowInitialY = 250;
-        float columnInitialY = 190;
 
         float columnLine1X = 95;
         float columnLine2X = 245;
@@ -306,232 +371,87 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
             lineColumnY += tableRowHeight;
         }
 
+        //Draw checkbox and certificate string
+        Drawable checkedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_box_24);
+        checkedDrawable.setBounds(50, 357,  60, 367);
+        checkedDrawable.draw(canvas);
+
+        canvas.drawText("I certify that the above control measures have been implemented and the site is safe.", 67, 365, textPaint);
+        canvas.drawText("Worker in charge: " + binding.tradesmenEditText.getText().toString(), 50, 380, textPaint);
+
+        //Employee table
+        canvas.drawLine(borderMargin, 385, documentWidth - borderMargin, 385, borderPaint);
+        canvas.drawText("Employee Name:", 180, 395, boldPaint);
+        canvas.drawText("Signature:", 450, 395, boldPaint);
+        canvas.drawText("Date:", 680, 395, boldPaint);
+        canvas.drawLine(borderMargin, 400, documentWidth - borderMargin, 400, borderPaint);
+
+        //Draw employee columns
+
+        canvas.drawLine(columnLine4X, 385, columnLine4X, 400, borderPaint);
+        canvas.drawLine(columnLine6X, 385, columnLine6X, 400, borderPaint);
+
+        float employeeTextInitalY = 410;
+        float employeeColumnInitalY = 400;
+        int employeeSignatureIndex = 1;
+
+        //Signature Dimensions
+        int signatureLeft = 445;
+        int signatureTop = 401;
+        int signatureRight = 550;
+        int signatureBottom = 424;
+
+        for (int i = 0; i <binding.enterTradesmenContainerLayout.getChildCount(); i++) {
+            //Collect information inputted from user
+            RelativeLayout employeeRelativeLayout = (RelativeLayout) binding.enterTradesmenContainerLayout.getChildAt(i);
+            EditText employeeNameEditText = employeeRelativeLayout.findViewById(R.id.employeeEditText);
+            Button employeeDateButton = employeeRelativeLayout.findViewById(R.id.employeeDateBtn);
+
+            //Employee data table
+            canvas.drawText(employeeNameEditText.getText().toString(), 50, employeeTextInitalY, textPaint);
+
+            //Retrieve digital signature bitmaps and set dimensions
+            List<Bitmap> signatureBitmaps = BitmapSingleton.getInstance().getMultipleSignatureBitmaps();
+            Bitmap employeeSignatureBitmap = signatureBitmaps.get(employeeSignatureIndex);
+
+
+            Rect employeeSignatureRect = new Rect(signatureLeft, signatureTop, signatureRight, signatureBottom);
+
+            canvas.drawBitmap(employeeSignatureBitmap, null, employeeSignatureRect, null);
 
 
 
+            canvas.drawText(employeeDateButton.getText().toString(), 680 , employeeTextInitalY, textPaint);
 
+            //Draw columns about input
+            canvas.drawLine(columnLine4X, employeeColumnInitalY, columnLine4X, employeeColumnInitalY + tableRowHeight, borderPaint);
+            canvas.drawLine(columnLine6X, employeeColumnInitalY, columnLine6X, employeeColumnInitalY + tableRowHeight, borderPaint);
+            canvas.drawLine(borderMargin, employeeColumnInitalY + tableRowHeight, documentWidth - borderMargin, employeeColumnInitalY + tableRowHeight, borderPaint);
 
-//
-//
-//        //Establish headers for table rows
-//        canvas.drawText("INSPECTION ACTIVITY", 160, 205, boldPaint);
-//        canvas.drawText("Yes", columnLine1X + 7, 205, boldPaint);
-//        canvas.drawText("No", columnLine2X + 7, 205, boldPaint);
-//        canvas.drawText("NA", columnLine3X + 7, 205, boldPaint);
-//
-//        //Create row with data from user input
-//
-//        for (int i = 0; i < 19; i++) {
-//
-//            View rowView = binding.tableLayoutCheckboxes.getChildAt(i);
-//            if (rowView instanceof TableRow) {
-//                TableRow row = (TableRow) rowView;
-//                int checkedCheckboxIndex = -1;
-//
-//                for (int a = 1; a < row.getChildCount(); a++) {
-//                    View rowChildView = row.getChildAt(a);
-//                    if (rowChildView instanceof CheckBox) {
-//                        CheckBox checkBox = (CheckBox) rowChildView;
-//
-//
-//                        boolean isChecked = checkBox.isChecked();
-//                        if (isChecked) {
-//                            checkedCheckboxIndex = a - 1;
-//                            break;
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                if (checkedCheckboxIndex >= 0 && checkedCheckboxIndex <= 2) {
-//                    TextView textView = (TextView) row.getChildAt(0);
-//                    String text = textView.getText().toString();
-//                    Log.d("Testing", "Question: " + text + " Checked Checkbox Index: " + checkedCheckboxIndex);
-//                    //Print checked drawable dependent on which checkbox is pressed
-//                    canvas.drawText(text, borderMargin + 5, tableRowInitialY + 15, textPaint);
-//                    switch (checkedCheckboxIndex) {
-//
-//                        //Yes is pressed
-//                        case 0:
-//                            checkedDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
-//                            checkedDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialY + 2), (int) (columnLine3X - 5), (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialY + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//                            break;
-//
-//                        //No is pressed
-//                        case 1:
-//                            checkedDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialY + 2), (int) (columnLine3X - 5), (int) (tableRowInitialY + 23));
-//                            checkedDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialY + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//                            break;
-//
-//                        //NA is pressed
-//                        case 2:
-//                            checkedDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialY + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialY + 23));
-//                            checkedDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialY + 2), (int) (columnLine3X - 5), (int) (tableRowInitialY + 23));
-//                            checkedBlankDrawable.draw(canvas);
-//                            break;
-//                    }
-//
-//
-//                }
-//
-//                //Draw left line of table row
-//                canvas.drawLine(borderMargin, tableRowInitialY, borderMargin, tableRowInitialY + tableRowHeight, borderPaint);
-//                //Draw right line of table row
-//                canvas.drawLine(documentWidth - borderMargin, tableRowInitialY, documentWidth - borderMargin, tableRowInitialY + tableRowHeight, borderPaint);
-//                //Draw bottom line of table row
-//                canvas.drawLine(borderMargin, tableRowInitialY + tableRowHeight, documentWidth - borderMargin, tableRowInitialY + tableRowHeight, borderPaint);
-//
-//
-//                //Draw columns
-//                canvas.drawLine(columnLine1X, columnInitialY, columnLine1X, columnInitialY + tableRowHeight, borderPaint);
-//                canvas.drawLine(columnLine2X, columnInitialY, columnLine2X, columnInitialY + tableRowHeight, borderPaint);
-//                canvas.drawLine(columnLine3X, columnInitialY, columnLine3X, columnInitialY + tableRowHeight, borderPaint);
-//
-//                tableRowInitialY += tableRowHeight;
-//                columnInitialY += 25;
-//            }
-//        }
-//        //Draw last set of column lines for final entry
-//        canvas.drawLine(columnLine1X, columnInitialY, columnLine1X, columnInitialY + tableRowHeight, borderPaint);
-//        canvas.drawLine(columnLine2X, columnInitialY, columnLine2X, columnInitialY + tableRowHeight, borderPaint);
-//        canvas.drawLine(columnLine3X, columnInitialY, columnLine3X, columnInitialY + tableRowHeight, borderPaint);
-//
-//        visualInspectionDocument.finishPage(documentPage);
-//
-//
-//        //Start page 2 to display further user input
-//        PdfDocument.PageInfo documentPageInfo2 = new PdfDocument.PageInfo.Builder(documentWidth, documentHeight, 2).create();
-//        PdfDocument.Page documentPage2 = visualInspectionDocument.startPage(documentPageInfo2);
-//
-//        Canvas canvas2 = documentPage2.getCanvas();
-//
-//        //Set Pinnacle Power banner at top of document
-//        canvas2.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
-//
-//        float tableRowInitialYPage2 = 215;
-//        float columnInitialYPage2 = 190;
-//
-//        //Establish headers for table rows
-//        canvas2.drawText("ROOM BY ROOM INSPECTION", 150, 205, boldPaint);
-//        canvas2.drawText("Yes", columnLine1X + 7, 205, boldPaint);
-//        canvas2.drawText("No", columnLine2X + 7, 205, boldPaint);
-//        canvas2.drawText("NA", columnLine3X + 7, 205, boldPaint);
-//
-//        canvas2.drawRect(lineStokeRectf, borderPaint);
-//
-//
-//        for (int i = 20; i < 37; i++) {
-//
-//            View rowView = binding.tableLayoutCheckboxes.getChildAt(i);
-//            if (rowView instanceof TableRow) {
-//                TableRow row = (TableRow) rowView;
-//                int checkedCheckboxIndex = -1;
-//
-//                for (int a = 1; a < row.getChildCount(); a++) {
-//                    View rowChildView = row.getChildAt(a);
-//                    if (rowChildView instanceof CheckBox) {
-//                        CheckBox checkBox = (CheckBox) rowChildView;
-//
-//
-//                        boolean isChecked = checkBox.isChecked();
-//                        if (isChecked) {
-//                            checkedCheckboxIndex = a - 1;
-//                            break;
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                if (checkedCheckboxIndex >= 0 && checkedCheckboxIndex <= 2) {
-//                    TextView textView = (TextView) row.getChildAt(0);
-//                    String text = textView.getText().toString();
-//                    //Print checked drawable dependent on which checkbox is pressed
-//                    canvas2.drawText(text, borderMargin + 5, tableRowInitialYPage2 + 15, textPaint);
-//                    switch (checkedCheckboxIndex) {
-//
-//                        //Yes is pressed
-//                        case 0:
-//                            checkedDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine3X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialYPage2 + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//                            break;
-//
-//                        //No is pressed
-//                        case 1:
-//                            checkedDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine3X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialYPage2 + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//                            break;
-//
-//                        //NA is pressed
-//                        case 2:
-//                            checkedDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialYPage2 + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialYPage2 + 23));
-//                            checkedDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//
-//                            checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine3X - 5), (int) (tableRowInitialYPage2 + 23));
-//                            checkedBlankDrawable.draw(canvas2);
-//                            break;
-//                    }
-//
-//
-//                }
-//
-//                //Draw left line of table row
-//                canvas2.drawLine(borderMargin, tableRowInitialYPage2, borderMargin, tableRowInitialYPage2 + tableRowHeight, borderPaint);
-//                //Draw right line of table row
-//                canvas2.drawLine(documentWidth - borderMargin, tableRowInitialYPage2, documentWidth - borderMargin, tableRowInitialYPage2 + tableRowHeight, borderPaint);
-//                //Draw bottom line of table row
-//                canvas2.drawLine(borderMargin, tableRowInitialYPage2 + tableRowHeight, documentWidth - borderMargin, tableRowInitialYPage2 + tableRowHeight, borderPaint);
-//
-//
-//                //Draw columns
-//                canvas2.drawLine(columnLine1X, columnInitialYPage2, columnLine1X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//                canvas2.drawLine(columnLine2X, columnInitialYPage2, columnLine2X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//                canvas2.drawLine(columnLine3X, columnInitialYPage2, columnLine3X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//
-//                tableRowInitialYPage2 += tableRowHeight;
-//                columnInitialYPage2 += 25;
-//            }
-//        }
-//        //Draw last set of column lines for final entry
-//        canvas2.drawLine(columnLine1X, columnInitialYPage2, columnLine1X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//        canvas2.drawLine(columnLine2X, columnInitialYPage2, columnLine2X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//        canvas2.drawLine(columnLine3X, columnInitialYPage2, columnLine3X, columnInitialYPage2 + tableRowHeight, borderPaint);
-//
-//
+            employeeTextInitalY += tableRowHeight;
+            employeeColumnInitalY += tableRowHeight;
+            signatureTop += tableRowHeight;
+            signatureBottom += tableRowHeight;
+            employeeSignatureIndex += 1;
+        }
+
+        //Close Page1
         SiteRiskAssessmentDocument.finishPage(documentPage);
+
+        PdfDocument.PageInfo documentPageInfo2 = new PdfDocument.PageInfo.Builder(documentWidth, documentHeight, 2).create();
+        PdfDocument.Page documentPage2 = SiteRiskAssessmentDocument.startPage(documentPageInfo2);
+
+        Canvas canvas2 = documentPage2.getCanvas();
+
+        //Set Pinnacle Power banner at top of document
+        Bitmap riskMatrixBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.risk_matrix);
+        Rect riskMatrixRect = new Rect(0, 0, documentWidth, documentHeight);
+        canvas2.drawBitmap(riskMatrixBitmap, null, riskMatrixRect, null);
+
+
+        //Close Page2
+        SiteRiskAssessmentDocument.finishPage(documentPage2);
+
 
         //Output PDF
         File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -549,8 +469,4 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         }
     }
 
-    public void digitalSignatureOnPressed(View view) {
-        Intent intent = new Intent(SiteSpecificRiskAssessmentActivity.this, digitalSignatureView.class);
-        signatureActivityResultLauncher.launch(intent);
-    }
 }
