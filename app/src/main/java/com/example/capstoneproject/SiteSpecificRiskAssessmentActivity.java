@@ -1,5 +1,6 @@
 package com.example.capstoneproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -36,9 +36,7 @@ import com.example.capstoneproject.databinding.ActivitySiteSpecificRiskAssessmen
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
@@ -49,13 +47,14 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult activityResult) {
                     int result = activityResult.getResultCode();
                     if (result == RESULT_OK) {
+                        assert activityResult.getData() != null;
                         int employeeId = activityResult.getData().getIntExtra("employeeId", -1);
                         Bitmap signatureBitmap = BitmapSingleton.getInstance().getSignatureBitmap();
                         if (signatureBitmap != null) {
                             if (employeeId == 0) {
                                 binding.signatureImageView.setVisibility(View.VISIBLE);
                             } else {
-                                handleSignatureResult(employeeId, signatureBitmap);
+                                handleSignatureResult(employeeId);
                             }
                         }
                     }
@@ -64,12 +63,9 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
     ActivitySiteSpecificRiskAssessmentBinding binding;
 
-    private Map<Integer, Bitmap> signatureMap = new HashMap<>(); // Use this map to store signature bitmaps for employees.
 
     private int hazardCount = 0;
     private int employeeCount = 0;
-
-    private String employeeSignatureImageViewId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,55 +87,48 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         binding.certifyCheckbox.setVisibility(View.INVISIBLE);
 
         //Add text listener for when user inputs number of hazards for site
-        binding.hazardCountEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                    try {
-                        hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
-                        if (hazardCount < 1) {
-                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
-                        } else {
-                            updateHazardViews(hazardCount);
-                            binding.certifyCheckbox.setVisibility(View.VISIBLE);
-                        }
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+        binding.hazardCountEditText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                try {
+                    hazardCount = Integer.parseInt(binding.hazardCountEditText.getText().toString());
+                    if (hazardCount < 1) {
+                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
+                    } else if (hazardCount > 7) {
+                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a integer < 8", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updateHazardViews(hazardCount);
+                        binding.certifyCheckbox.setVisibility(View.VISIBLE);
                     }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
                 }
-
-                return false;
             }
+
+            return false;
         });
 
         //Check if checkbox is clicked and set visibility of next edittext to visible
-        binding.certifyCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.tradesmenCountEditText.setVisibility(View.VISIBLE);
-            }
-        });
+        binding.certifyCheckbox.setOnClickListener(view -> binding.tradesmenCountEditText.setVisibility(View.VISIBLE));
 
         //Add text listener for when user inputs number of employees for site
-        binding.tradesmenCountEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                    try {
-                        employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
-                        if (employeeCount < 1) {
-                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
-                        } else {
-                            updateEmployeeViews(employeeCount);
-                            binding.submitDocumentBtn.setVisibility(View.VISIBLE);
-                        }
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
+        binding.tradesmenCountEditText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                try {
+                    employeeCount = Integer.parseInt(binding.tradesmenCountEditText.getText().toString());
+                    if (employeeCount < 1) {
+                        Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a positive integer", Toast.LENGTH_SHORT).show();
+                    } else if (employeeCount > 7) {
+                            Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Please enter a integer < 8", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updateEmployeeViews(employeeCount);
+                        binding.submitDocumentBtn.setVisibility(View.VISIBLE);
                     }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(SiteSpecificRiskAssessmentActivity.this, "Integer Input only", Toast.LENGTH_SHORT).show();
                 }
-
-                return false;
             }
+
+            return false;
         });
 
         try {
@@ -154,13 +143,14 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateEmployeeViews(int employeeCount) {
         // Clear existing views
         binding.enterTradesmenContainerLayout.removeAllViews();
 
         int employeeIDInteger = 1;
         for (int b = 0; b < employeeCount; b++) {
-            View employeeContainerLayout = getLayoutInflater().inflate(R.layout.tradesmen_entry, null);
+            @SuppressLint("InflateParams") View employeeContainerLayout = getLayoutInflater().inflate(R.layout.tradesmen_entry, null);
             TextView employeeTitle = employeeContainerLayout.findViewById(R.id.employeeTextView);
             Button employeeDateButton = employeeContainerLayout.findViewById(R.id.employeeDateBtn);
             Button employeeSignatureButton = employeeContainerLayout.findViewById(R.id.digitalSignatureBtn1);
@@ -170,7 +160,7 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
             employeeTitle.setText("Employee " + employeeIDInteger);
 
-            employeeSignatureImageViewId = "signatureImageView" + employeeIDInteger;
+            String employeeSignatureImageViewId = "signatureImageView" + employeeIDInteger;
 
             signatureImageView.setId(View.generateViewId());
             signatureImageView.setTag(employeeSignatureImageViewId);
@@ -193,9 +183,8 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
     }
 
     //Displays checkmark icon once user enters successful digital signature on activity
-    public void handleSignatureResult(int employeeId, Bitmap signatureBitmap) {
+    public void handleSignatureResult(int employeeId) {
         // Store the signature bitmap in the map
-        signatureMap.put(employeeId, signatureBitmap);
         String signatureImageViewId = "signatureImageView" + employeeId;
 
         // Display the signature in the corresponding ImageView
@@ -204,13 +193,14 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void updateHazardViews(int newHazardCount) {
         // Clear existing views
         binding.enterHazardContainerLayout.removeAllViews();
 
         int hazardTitleInteger = 1;
         for (int a = 0; a < newHazardCount; a++) {
-            View hazardContainerLayout = getLayoutInflater().inflate(R.layout.hazard_entry, null);
+            @SuppressLint("InflateParams") View hazardContainerLayout = getLayoutInflater().inflate(R.layout.hazard_entry, null);
             TextView hazardTitle = hazardContainerLayout.findViewById(R.id.hazardTitleTextView);
             hazardTitle.setText("Hazard " + hazardTitleInteger);
             binding.enterHazardContainerLayout.addView(hazardContainerLayout);
@@ -219,6 +209,54 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
     }
 
     private void generatePDF() {
+
+        //Validate all inputs have been filled out before generating pdf
+        if (binding.jobNumberEditText.getText().toString().isEmpty() || binding.addressEditText.getText().toString().isEmpty() || binding.tradesmenEditText.getText().toString().isEmpty() ||
+                binding.chooseDateBtn1.getText().toString().equals("Date") || binding.postCodeEditText.getText().toString().isEmpty() || binding.stateEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //Check all inputs in hazard container have been entered
+        for (int i = 0; i < binding.enterHazardContainerLayout.getChildCount(); i++) {
+            LinearLayout hazardLinearLayout = (LinearLayout) binding.enterHazardContainerLayout.getChildAt(i);
+
+            EditText SWMNSEditText = hazardLinearLayout.findViewById(R.id.SWMSEditText);
+            EditText taskEditText = hazardLinearLayout.findViewById(R.id.taskEditText);
+            EditText hazardEditText = hazardLinearLayout.findViewById(R.id.hazardEntryEditText);
+            EditText riskEditText = hazardLinearLayout.findViewById(R.id.riskEditText);
+            EditText riskRatingEditText = hazardLinearLayout.findViewById(R.id.rRatingEditText);
+            EditText controlEditText = hazardLinearLayout.findViewById(R.id.controlEditText);
+            EditText heirarchyOfControlEditText = hazardLinearLayout.findViewById(R.id.heirarchyEditText);
+            EditText residualRiskRatingEditText = hazardLinearLayout.findViewById(R.id.residualRatingEditText);
+
+            String SWMS = SWMNSEditText.getText().toString();
+            String task = taskEditText.getText().toString();
+            String hazard = hazardEditText.getText().toString();
+            String risk = riskEditText.getText().toString();
+            String riskRating = riskRatingEditText.getText().toString();
+            String control = controlEditText.getText().toString();
+            String hierarchyOfControl = heirarchyOfControlEditText.getText().toString();
+            String residualRiskRating = residualRiskRatingEditText.getText().toString();
+
+            if (SWMS.isEmpty() || task.isEmpty() || hazard.isEmpty() || risk.isEmpty() || riskRating.isEmpty() || control.isEmpty() || hierarchyOfControl.isEmpty() || residualRiskRating.isEmpty()) {
+                Toast.makeText(this, "Please fill in all required fields in the hazard section", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        //Check all inputs in employee container have been entered
+        for (int i = 0; i < binding.enterTradesmenContainerLayout.getChildCount(); i++) {
+            RelativeLayout employeeRelativeLayout = (RelativeLayout) binding.enterTradesmenContainerLayout.getChildAt(i);
+            EditText employeeNameEditText = employeeRelativeLayout.findViewById(R.id.employeeEditText);
+            @SuppressLint("CutPasteId") Button dateBtn = employeeRelativeLayout.findViewById(R.id.employeeDateBtn);
+            String dateBtnString = dateBtn.getText().toString();
+
+            if (employeeNameEditText.getText().toString().isEmpty() || dateBtnString.equals("Date")){
+                Toast.makeText(this, "Please fill in all required employee names", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
 
         int documentHeight = 595;
@@ -262,6 +300,8 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setColor(Color.BLACK);
         borderPaint.setStrokeWidth(0.5F);
+
+
 
 
         canvas.drawText("SITE SPECIFIC RISK ASSESSMENT FORM", borderMargin, 130, boldTitlePaint);
@@ -373,6 +413,7 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
         //Draw checkbox and certificate string
         Drawable checkedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_box_24);
+        assert checkedDrawable != null;
         checkedDrawable.setBounds(50, 357,  60, 367);
         checkedDrawable.draw(canvas);
 
@@ -397,15 +438,15 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
 
         //Signature Dimensions
         int signatureLeft = 445;
-        int signatureTop = 401;
+        int signatureTop = 399;
         int signatureRight = 550;
-        int signatureBottom = 424;
+        int signatureBottom = 423;
 
         for (int i = 0; i <binding.enterTradesmenContainerLayout.getChildCount(); i++) {
             //Collect information inputted from user
             RelativeLayout employeeRelativeLayout = (RelativeLayout) binding.enterTradesmenContainerLayout.getChildAt(i);
             EditText employeeNameEditText = employeeRelativeLayout.findViewById(R.id.employeeEditText);
-            Button employeeDateButton = employeeRelativeLayout.findViewById(R.id.employeeDateBtn);
+            @SuppressLint("CutPasteId") Button employeeDateButton = employeeRelativeLayout.findViewById(R.id.employeeDateBtn);
 
             //Employee data table
             canvas.drawText(employeeNameEditText.getText().toString(), 50, employeeTextInitalY, textPaint);

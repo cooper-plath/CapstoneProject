@@ -98,5 +98,8 @@
     <string name="workplace_location">Workplace location:</string>
     <string name="job_number">Job Number</string>
     <string name="post_code">Post Code</string>
-    <string name="how_many_hazards">How many hazards?</string>
+    <string name="how_many_hazards">How many hazards? (1 – 7)</string>
+    <string name="how_many_employees_1_7">How many Employees? (1 – 7)</string>
+    <string name="state">State:</string>
+    <string name="form_completed_by">Form completed by</string>
 </resources>

@@ -20,7 +20,8 @@
             android:text="SITE SPECIFIC RISK ASSESSMENT FORM"
             android:textAlignment="center"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/jobNumberEditText"
@@ -29,8 +30,11 @@
             android:layout_below="@+id/title"
             android:layout_marginStart="10dp"
             android:hint="@string/job_number"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:textColorHint="#8D6E63"
             android:textSize="12sp"
-            android:inputType="number" />
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/tradesmenEditText"
@@ -39,19 +43,25 @@
             android:layout_below="@+id/title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/jobNumberEditText"
-            android:hint="Form completed by"
+            android:hint="@string/form_completed_by"
+            android:inputType="text"
+            android:minHeight="48dp"
             android:textSize="12sp"
-            android:inputType="text" />
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/postCodeEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/jobNumberEditText"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:hint="@string/post_code"
-            android:textSize="12sp" />
+            android:minHeight="48dp"
+            android:textColorHint="#8D6E63"
+            android:textSize="12sp"
+            android:inputType="number"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/addressEditText"
@@ -61,20 +71,27 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@id/jobNumberEditText"
+            android:autofillHints=""
             android:hint="@string/workplace_location"
-            android:textSize="12sp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/stateEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tradesmenEditText"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:hint="State:"
-            android:textSize="12sp" />
+            android:hint="@string/state"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:textColorHint="#8D6E63"
+            android:textSize="12sp"
+            android:inputType="text"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/digitalSignatureBtn"
@@ -90,18 +107,19 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_below="@id/postCodeEditText"
-            android:layout_alignRight="@+id/digitalSignatureBtn"
-            android:layout_marginLeft="2dp"
+            android:layout_alignEnd="@+id/digitalSignatureBtn"
+            android:layout_marginStart="2dp"
             android:layout_marginTop="38dp"
             android:src="@drawable/baseline_check_circle_outline_24_white"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
 
         <Button
             android:id="@+id/chooseDateBtn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/addressEditText"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="25dp"
             android:text="@string/exampleDate" />
 
@@ -111,9 +129,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/digitalSignatureBtn"
             android:layout_centerHorizontal="true"
+            android:autofillHints=""
             android:hint="@string/how_many_hazards"
             android:inputType="number"
-            android:textAlignment="center" />
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColorHint="#8D6E63" />
 
         <LinearLayout
             android:id="@+id/enterHazardContainerLayout"
@@ -135,9 +156,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/certifyCheckbox"
             android:layout_centerHorizontal="true"
-            android:hint="How many Employees?"
+            android:hint="@string/how_many_employees_1_7"
+            android:inputType="number"
+            android:minHeight="48dp"
             android:textAlignment="center"
-            android:inputType="number" />
+            android:textColorHint="#8D6E63"
+            android:autofillHints="" />
 
         <LinearLayout
             android:id="@+id/enterTradesmenContainerLayout"
