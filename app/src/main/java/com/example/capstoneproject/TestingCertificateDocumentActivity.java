@@ -1,8 +1,5 @@
 package com.example.capstoneproject;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.icu.lang.UCharacter.JoiningGroup.PE;
 import static com.example.capstoneproject.DatePickerHelper.initDateButton;
 
 import android.content.Intent;
@@ -25,7 +22,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -35,8 +31,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.capstoneproject.databinding.ActivityTestingCertificateDocumentBinding;
 
@@ -78,15 +72,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
         setRegulationBold();
 
-        binding.submitDocumentBtn.setOnClickListener(view -> {
-//            if (checkDocumentPermissions()) {
-//                generatePDF();
-//            } else {
-//                requestDocumentPermission();
-//            }
-            generatePDF();
-
-        });
+        binding.submitDocumentBtn.setOnClickListener(view -> generatePDF());
     }
 
     private void generatePDF() {
@@ -105,6 +91,18 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
         String contractorFinalName = binding.contractorFinalNameEditText.getText().toString();
         String dateBtn1 = binding.chooseDateBtn1.getText().toString();
         String dateBtn2 = binding.chooseDateBtn2.getText().toString();
+
+
+        //Check all inputs have been filed out before outputting to pdf
+        if (nameTitle.isEmpty() || nameGivenName.isEmpty() || nameSurname.isEmpty() ||
+                addressStreet.isEmpty() || addressSuburb.isEmpty() || addressPostCode.isEmpty() ||
+                workCompleted.isEmpty() || contractorLicenseNumber.isEmpty() || contractorLicenseName.isEmpty() ||
+                contractorLicenseMobile.isEmpty() || contractorFinalName.isEmpty() || dateBtn1.equals("Date") || dateBtn2.equals("Date") || binding.signatureImageView.getVisibility() == View.GONE) {
+
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         //Set Height and Width of Document to A4
         int documentHeight = 842;
@@ -133,7 +131,7 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
         //Set Pinnacle Power banner at top of document
         Bitmap pinnacleBannerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pinnacle_banner);
-        Rect pinnacleBannerRect = new Rect(borderMargin + 2, borderMargin +  2, documentWidth - borderMargin - 2, 150);
+        Rect pinnacleBannerRect = new Rect(borderMargin + 2, borderMargin + 2, documentWidth - borderMargin - 2, 150);
         canvas.drawBitmap(pinnacleBannerBitmap, null, pinnacleBannerRect, null);
 
         //Set line stroke under banner
@@ -168,10 +166,12 @@ public class TestingCertificateDocumentActivity extends AppCompatActivity {
 
         //Add checkboxes to top of document
         if (binding.testingAndComplianceCheckbox.isChecked()) {
+            assert checkedDrawable != null;
             checkedDrawable.setBounds((int) (checkboxTextX + boldPaint.measureText("Testing and Compliance") + 5), 165, (int) (checkboxTextX + boldPaint.measureText("Testing and Compliance") + 10) + drawableWidth, 170 + drawableHeight);
             checkedDrawable.draw(canvas);
         }
         if (binding.testingAndSafetyCheckbox.isChecked()) {
+            assert checkedDrawable != null;
             checkedDrawable.setBounds((int) (checkboxTextX + boldPaint.measureText("Testing and Safety") + 5), 205, (int) (checkboxTextX + boldPaint.measureText("Testing and Safety") + 10) + drawableWidth, 210 + drawableHeight);
             checkedDrawable.draw(canvas);
         }

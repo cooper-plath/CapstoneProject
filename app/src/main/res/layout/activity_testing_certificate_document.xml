@@ -42,13 +42,13 @@
                     android:id="@+id/testingAndComplianceCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Testing and Compliance" />
+                    android:text="@string/testing_and_compliance" />
 
                 <CheckBox
                     android:id="@+id/testingAndSafetyCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Testing and Safety" />
+                    android:text="@string/testing_and_safety" />
 
             </LinearLayout>
         </LinearLayout>
@@ -81,14 +81,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/title" />
+                android:hint="@string/title"
+                android:inputType="text"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                android:textColorHint="#8D6E63"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/nameGivenNameEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/given_name_s" />
+                android:autofillHints=""
+                android:hint="@string/given_name_s"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textColorHint="#8D6E63" />
 
             <EditText
                 android:id="@+id/nameSurnameEditText"
@@ -96,7 +105,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:hint="@string/surname" />
+                android:autofillHints=""
+                android:hint="@string/surname"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textColorHint="#8D6E63"
+                tools:ignore="VisualLintTextFieldSize" />
         </LinearLayout>
 
         <TextView
@@ -119,7 +133,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:hint="@string/street" />
+                android:hint="@string/street"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:autofillHints=""
+                tools:ignore="VisualLintTextFieldSize" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,15 +150,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:autofillHints=""
                 android:hint="@string/suburb_town"
-                android:paddingEnd="100sp" />
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:paddingEnd="100sp"
+                android:textColorHint="#8D6E63"
+                tools:ignore="RtlSymmetry" />
 
             <EditText
                 android:id="@+id/addressPostCodeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="@string/postcode" />
+                android:autofillHints=""
+                android:hint="@string/postcode"
+                android:inputType="number"
+                android:minHeight="48dp"
+                android:textColorHint="#8D6E63"
+                tools:ignore="VisualLintTextFieldSize" />
 
         </LinearLayout>
 
@@ -159,7 +187,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:text="@string/please_include_site_address_for_electrical_installation_work_if_different_from_above"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            tools:ignore="SmallSp" />
 
         <EditText
             android:id="@+id/workCompletedEditText"
@@ -167,7 +196,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="@string/work_completed"
-            android:textAlignment="center" />
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            android:textColorHint="#8D6E63"
+            android:autofillHints=""
+            tools:ignore="VisualLintTextFieldSize" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -202,7 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Electical Contracting License Number"
+                android:text="@string/electical_contracting_license_number"
                 android:textStyle="bold" />
 
             <EditText
@@ -210,8 +244,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:autofillHints=""
                 android:hint="@string/ElectricalLicenseExample"
-                android:textAlignment="center" />
+                android:inputType="number"
+                android:minHeight="48dp"
+                android:textAlignment="center"
+                android:textColorHint="#8D6E63"
+                tools:ignore="VisualLintTextFieldSize" />
 
         </LinearLayout>
 
@@ -234,7 +273,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="@string/name"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:inputType="text"
+                android:autofillHints=""
+                tools:ignore="VisualLintTextFieldSize" />
 
         </LinearLayout>
 
@@ -257,7 +299,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:hint="@string/mobile"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:inputType="number"
+                android:autofillHints=""
+                tools:ignore="VisualLintTextFieldSize" />
 
         </LinearLayout>
 
@@ -267,7 +312,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="@string/testCertificateInformation" />
+            android:text="@string/testCertificateInformation"
+            tools:ignore="VisualLintLongText" />
 
         <EditText
             android:id="@+id/contractorFinalNameEditText"
@@ -275,7 +321,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="@string/name"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="VisualLintTextFieldSize" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -297,11 +346,12 @@
                 android:id="@+id/signatureImageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignRight="@+id/digitalSignatureBtn"
-                android:layout_marginLeft="2dp"
+                android:layout_alignEnd="@+id/digitalSignatureBtn"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="12dp"
                 android:src="@drawable/baseline_check_circle_outline_24_white"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
 
         </RelativeLayout>
 
