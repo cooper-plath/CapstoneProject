@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Capstone Project Beta"
+        android:text="On-The-Go Document Manager"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:textSize="25sp"
