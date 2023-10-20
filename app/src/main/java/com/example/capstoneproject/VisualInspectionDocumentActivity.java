@@ -50,6 +50,12 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
     private void generatePDF() {
 
+        if (binding.visualDateBtn.equals("Date") || binding.addressEditText.getText().toString().isEmpty()) {
+
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         int documentHeight = 842;
         int documentWidth = 595;
@@ -119,6 +125,7 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
         //Create row with data from user input
 
+        int checkedCheckboxCount = 0;
         for (int i = 0; i < 19; i++) {
 
             View rowView = binding.tableLayoutCheckboxes.getChildAt(i);
@@ -135,6 +142,7 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
                         boolean isChecked = checkBox.isChecked();
                         if (isChecked) {
                             checkedCheckboxIndex = a - 1;
+                            checkedCheckboxCount++;
                             break;
                         }
 
@@ -152,9 +160,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //Yes is pressed
                         case 0:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
                             checkedDrawable.draw(canvas);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialY + 2), (int) (columnLine3X - 5), (int) (tableRowInitialY + 23));
                             checkedBlankDrawable.draw(canvas);
 
@@ -164,9 +174,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //No is pressed
                         case 1:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialY + 2), (int) (columnLine3X - 5), (int) (tableRowInitialY + 23));
                             checkedDrawable.draw(canvas);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
                             checkedBlankDrawable.draw(canvas);
 
@@ -176,9 +188,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //NA is pressed
                         case 2:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialY + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialY + 23));
                             checkedDrawable.draw(canvas);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialY + 2), (int) (columnLine2X - 5), (int) (tableRowInitialY + 23));
                             checkedBlankDrawable.draw(canvas);
 
@@ -189,6 +203,7 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
 
                 }
+
 
                 //Draw left line of table row
                 canvas.drawLine(borderMargin, tableRowInitialY, borderMargin, tableRowInitialY + tableRowHeight, borderPaint);
@@ -207,6 +222,8 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
                 columnInitialY += 25;
             }
         }
+
+
         //Draw last set of column lines for final entry
         canvas.drawLine(columnLine1X, columnInitialY, columnLine1X, columnInitialY + tableRowHeight, borderPaint);
         canvas.drawLine(columnLine2X, columnInitialY, columnLine2X, columnInitialY + tableRowHeight, borderPaint);
@@ -252,6 +269,7 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
                         boolean isChecked = checkBox.isChecked();
                         if (isChecked) {
                             checkedCheckboxIndex = a - 1;
+                            checkedCheckboxCount++;
                             break;
                         }
 
@@ -268,9 +286,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //Yes is pressed
                         case 0:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
                             checkedDrawable.draw(canvas2);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine3X - 5), (int) (tableRowInitialYPage2 + 23));
                             checkedBlankDrawable.draw(canvas2);
 
@@ -280,9 +300,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //No is pressed
                         case 1:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine2X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine3X - 5), (int) (tableRowInitialYPage2 + 23));
                             checkedDrawable.draw(canvas2);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
                             checkedBlankDrawable.draw(canvas2);
 
@@ -292,9 +314,11 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
 
                         //NA is pressed
                         case 2:
+                            assert checkedDrawable != null;
                             checkedDrawable.setBounds((int) (columnLine3X + 5), (int) (tableRowInitialYPage2 + 2), documentWidth - borderMargin - 5, (int) (tableRowInitialYPage2 + 23));
                             checkedDrawable.draw(canvas2);
 
+                            assert checkedBlankDrawable != null;
                             checkedBlankDrawable.setBounds((int) (columnLine1X + 5), (int) (tableRowInitialYPage2 + 2), (int) (columnLine2X - 5), (int) (tableRowInitialYPage2 + 23));
                             checkedBlankDrawable.draw(canvas2);
 
@@ -323,6 +347,14 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
                 columnInitialYPage2 += 25;
             }
         }
+        Log.d("CheckboxCount", "generatePDF: " + checkedCheckboxCount);
+
+        // Check if user hasn't pressed a checkbox in each row and display message
+        if (checkedCheckboxCount != 36) {
+            Toast.makeText(this, "Please click a checkbox for every entry.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //Draw last set of column lines for final entry
         canvas2.drawLine(columnLine1X, columnInitialYPage2, columnLine1X, columnInitialYPage2 + tableRowHeight, borderPaint);
         canvas2.drawLine(columnLine2X, columnInitialYPage2, columnLine2X, columnInitialYPage2 + tableRowHeight, borderPaint);

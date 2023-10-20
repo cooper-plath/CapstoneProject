@@ -246,17 +246,24 @@ public class SiteSpecificRiskAssessmentActivity extends AppCompatActivity {
         }
 
         //Check all inputs in employee container have been entered
+        int employeeId = 1;
         for (int i = 0; i < binding.enterTradesmenContainerLayout.getChildCount(); i++) {
             RelativeLayout employeeRelativeLayout = (RelativeLayout) binding.enterTradesmenContainerLayout.getChildAt(i);
             EditText employeeNameEditText = employeeRelativeLayout.findViewById(R.id.employeeEditText);
             @SuppressLint("CutPasteId") Button dateBtn = employeeRelativeLayout.findViewById(R.id.employeeDateBtn);
             String dateBtnString = dateBtn.getText().toString();
 
-            if (employeeNameEditText.getText().toString().isEmpty() || dateBtnString.equals("Date")){
+            String signatureImageViewId = "signatureImageView" + employeeId;
+
+            ImageView signatureImageView = binding.enterTradesmenContainerLayout.findViewWithTag(signatureImageViewId);
+
+            if (employeeNameEditText.getText().toString().isEmpty() || dateBtnString.equals("Date")  || signatureImageView.getVisibility() == View.GONE){
                 Toast.makeText(this, "Please fill in all required employee names", Toast.LENGTH_SHORT).show();
                 return;
             }
+            employeeId += 1;
         }
+
 
 
         int documentHeight = 595;

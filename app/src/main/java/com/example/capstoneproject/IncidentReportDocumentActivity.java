@@ -70,6 +70,16 @@ public class IncidentReportDocumentActivity extends AppCompatActivity {
     }
 
     private void generatePDF() {
+        //Check that user has filed in all information before outputting
+        if (binding.nameEditText.getText().toString().isEmpty() || binding.roleEditText.getText().toString().isEmpty() || binding.dateTimeEditText.getText().toString().isEmpty() || binding.personsInvolvedEditText.getText().toString().isEmpty()
+        || binding.descriptionIncidentEditText.getText().toString().isEmpty() || binding.witnessEditText.getText().toString().isEmpty() || binding.incidentDateBtn1.equals("Date") || binding.incidentDateBtn2.equals("Date") || binding.signatureImageView.getVisibility() == View.GONE
+                || binding.communicateMethodEditText.getText().toString().isEmpty()|| binding.treatmentEditText.getText().toString().isEmpty()|| binding.actionsTakenEditText.getText().toString().isEmpty()) {
+
+            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         //Set Height and Width of Document to A4
         int documentHeight = 842;
         int documentWidth = 595;
@@ -169,20 +179,24 @@ public class IncidentReportDocumentActivity extends AppCompatActivity {
         Drawable unCheckedDrawable = AppCompatResources.getDrawable(this, R.drawable.baseline_check_box_outline_blank_24);
 
         if (binding.pinnacleOfficeCheckbox.isChecked()) {
+            assert checkedDrawable != null;
             checkedDrawable.setBounds(0, 100, 15, 115);
             checkedDrawable.draw(canvas);
             canvas.drawText("Pinnacle Office - Dave/Admin", 16, 113, textPaint);
 
+            assert unCheckedDrawable != null;
             unCheckedDrawable.setBounds(0, 120, 15, 135);
             unCheckedDrawable.draw(canvas);
             canvas.drawText("Electrical Safety Office", 16, 133, textPaint);
         }
 
         if (binding.electricalSafetyOfficeCheckbox.isChecked()) {
+            assert unCheckedDrawable != null;
             unCheckedDrawable.setBounds(0, 100, 15, 115);
             unCheckedDrawable.draw(canvas);
             canvas.drawText("Pinnacle Office - Dave/Admin", 16, 113, textPaint);
 
+            assert checkedDrawable != null;
             checkedDrawable.setBounds(0, 120, 15, 135);
             checkedDrawable.draw(canvas);
             canvas.drawText("Electrical Safety Office", 16, 133, textPaint);

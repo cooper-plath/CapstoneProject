@@ -32,7 +32,8 @@
             android:inputType="text"
             android:minHeight="48dp"
             android:textAlignment="center"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/visualDateBtn"
@@ -41,7 +42,8 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="20dp"
             android:text="@string/exampleDate"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
     </LinearLayout>
 
     <RelativeLayout
@@ -53,7 +55,7 @@
             android:id="@+id/inspectionActivityTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INSPECTION ACTIVITY"
+            android:text="@string/inspection_activity"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -63,7 +65,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="107dp"
             android:text="@string/yes"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,7 +74,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="62dp"
             android:text="@string/no"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,7 +83,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="12dp"
             android:text="@string/na"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -416,7 +421,8 @@
                     <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center" />
+                        android:layout_gravity="center"
+                        tools:ignore="TooManyViews" />
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -998,7 +1004,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/submit"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:ignore="VisualLintButtonSize" />
             </TableLayout>
 
     </ScrollView>
