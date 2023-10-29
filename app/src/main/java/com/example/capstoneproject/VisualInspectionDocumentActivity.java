@@ -11,8 +11,10 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
+import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -364,7 +366,7 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
         visualInspectionDocument.finishPage(documentPage2);
 
         //Output PDF
-        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         String fileName = "VisualInspectionDocument.pdf";
         File file = new File(fileDir, fileName);
         try {
@@ -372,11 +374,51 @@ public class VisualInspectionDocumentActivity extends AppCompatActivity {
             visualInspectionDocument.writeTo(fileOutputStream);
             visualInspectionDocument.close();
             fileOutputStream.close();
-            Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Outputted to PDF", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        PdfRenderer pdfRenderer;
+        PdfRenderer.Page pdfPage;
+        int pageNumber = 1;
+
+
+        try {
+            // Open the PDF file
+            ParcelFileDescriptor fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+            pdfRenderer = new PdfRenderer(fileDescriptor);
+            int totalPages = pdfRenderer.getPageCount();
+            for (int pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+                pdfPage = pdfRenderer.openPage(pageIndex);
+
+                // Create a Bitmap to render the page
+                Bitmap bitmap = Bitmap.createBitmap(pdfPage.getWidth(), pdfPage.getHeight(), Bitmap.Config.ARGB_8888);
+
+                Canvas canvasBitmap = new Canvas(bitmap);
+                canvasBitmap.drawColor(Color.WHITE);
+                canvasBitmap.drawBitmap(bitmap, 0, 0, null);
+
+                // Render the PDF page onto the Bitmap
+                pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT);
+                pdfPage.close();
+
+                // Save the Bitmap as a JPEG image
+                File jpgFileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                String jpgFileName = "VisualInspectionDocument_" + pageNumber + ".jpg";
+                File jpgFile = new File(jpgFileDir, jpgFileName);
+                FileOutputStream jpgOutputStream = new FileOutputStream(jpgFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, jpgOutputStream);
+                jpgOutputStream.close();
+                pageNumber++;
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Outputted to Documents and Photo Album", Toast.LENGTH_SHORT).show();
     }
 
 
